@@ -4,7 +4,7 @@ import random
 import requests
 
 # GLOBAL VARIABLES
-TOTAL_ARGUMENTS = 2
+TOTAL_ARGUMENTS = 4
 NUM_RECOMMENDED_GAMES = 0
 
 # Master list consisting of info for all games
@@ -103,17 +103,73 @@ def AddGameToMasterList(game):
 
 def CheckArguments(totalArguments):
 	if len(sys.argv) != totalArguments:
-		print("Arguments required. Correct format: py backlogger.py <Number of required recommendations>")
+		print("Arguments required. Correct format: py backlogger.py <platform> <status> <Number of required recommendations>")
+		print("Valid platforms: PC_STEAM, NINTENDO_SWITCH, PC_EPIC, PS5, XBOX_GAME_PASS, PS4, NINTENDO_GAMEBOY, NINTENDO_DS, NINTENDO_3DS")
+		print("Valid status: BACKLOG, COMPLETE, WISHLIST, DROPPED, IN_PROGRESS")
 
 		sys.exit(0)
 
-	if int(sys.argv[1]) <= 0:
+	if int(sys.argv[3]) <= 0:
 		print("Number of required recommendations has to be a positive non-zero integer")
 
 		sys.exit(0)
 
+def GetPlatform():
+	platformIdentifier = sys.argv[1].upper()
+
+	platform = ""
+
+	if platformIdentifier == "PC_STEAM":
+		platform = PC_STEAM
+	elif platformIdentifier == "NINTENDO_SWITCH":
+		platform = NINTENDO_SWITCH
+	elif platformIdentifier == "PC_EPIC":
+		platform = PC_EPIC
+	elif platformIdentifier == "PS5":
+		platform = PS5
+	elif platformIdentifier == "XBOX_GAME_PASS":
+		platform = XBOX_GAME_PASS
+	elif platformIdentifier == "PS4":
+		platform = PS4
+	elif platformIdentifier == "NINTENDO_GAMEBOY":
+		platform = NINTENDO_GAMEBOY
+	elif platformIdentifier == "NINTENDO_DS":
+		platform = "NINTENDO_DS"
+	elif platformIdentifier == "NINTENDO_3DS":
+		platform = NINTENDO_3DS
+
+	if len(platform) == 0:
+		print("Invalid platform entered. Please try again!")
+
+		sys.exit(0)
+
+	return platform
+
+def GetStatus():
+	statusIdentifier = sys.argv[2].upper()
+
+	status = ""
+
+	if statusIdentifier == "BACKLOG":
+		status = BACKLOG;
+	elif statusIdentifier == "COMPLETE":
+		status = COMPLETE
+	elif statusIdentifier == "WISHLIST":
+		status = WISHLIST
+	elif statusIdentifier == "DROPPED":
+		status = DROPPED
+	elif statusIdentifier == "IN_PROGRESS":
+		status = IN_PROGRESS
+
+	if len(status) == 0:
+		print("Invalid status entered. Please try again!")
+
+		sys.exit(0)
+
+	return status
+
 def GetRecommendationsNumber():
-	return int(sys.argv[1])
+	return int(sys.argv[3])
 
 def GetSheetData():
 	apiUrl = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{SHEET_NAME}!A1:Z?alt=json&key={API_KEY}"
@@ -242,6 +298,10 @@ def main():
 
 	CheckArguments(TOTAL_ARGUMENTS)
 
+	platform = GetPlatform()
+
+	status = GetStatus()
+
 	NUM_RECOMMENDED_GAMES = GetRecommendationsNumber()
 
 	sheetData = GetSheetData()
@@ -254,7 +314,7 @@ def main():
 
 	PopulateLists()
 
-	recommendedGames = RecommendGamesByPlatform(PC_STEAM,BACKLOG)
+	recommendedGames = RecommendGamesByPlatform(platform,status)
 
 	PrintAllGamesInfo(recommendedGames)
 
