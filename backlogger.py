@@ -255,6 +255,8 @@ def RecommendGames(list):
 	else:
 		totalRecommendedGames = NUM_RECOMMENDED_GAMES
 
+	print(f"Recommending {totalRecommendedGames} out of a total of {len(list)} games!")
+
 	while currentNumRecommendedGames < totalRecommendedGames:
 		# Select a random game from the list of backlog games
 		recommendedGame = random.choice(list)
