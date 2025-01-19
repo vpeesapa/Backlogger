@@ -2,6 +2,7 @@ import sys
 import csv
 import random
 import requests
+from api_data import *
 
 # GLOBAL VARIABLES
 TOTAL_ARGUMENTS = 4
