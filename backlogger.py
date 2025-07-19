@@ -1,8 +1,9 @@
+import os
 import sys
 import csv
 import random
 import requests
-from api_data import *
+from dotenv import load_dotenv
 
 # GLOBAL VARIABLES
 TOTAL_ARGUMENTS = 4
@@ -102,6 +103,9 @@ def AddGameToMasterList(game):
 
 	GAMES_MASTER_LIST.append(newGame)
 
+def loadEnvironment():
+	load_dotenv()
+
 def CheckArguments(totalArguments):
 	if len(sys.argv) != totalArguments:
 		print("Arguments required. Correct format: py backlogger.py <platform> <status> <Number of required recommendations>")
@@ -173,7 +177,11 @@ def GetRecommendationsNumber():
 	return int(sys.argv[3])
 
 def GetSheetData():
-	apiUrl = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{SHEET_NAME}!A1:Z?alt=json&key={API_KEY}"
+	sheetId = os.getenv("SHEET_ID")
+	sheetName = os.getenv("SHEET_NAME")
+	apiKey = os.getenv("API_KEY")
+
+	apiUrl = f"https://sheets.googleapis.com/v4/spreadsheets/{sheetId}/values/{sheetName}!A1:Z?alt=json&key={apiKey}"
 
 	try:
 		# Make a GET request to fetch data from the API
@@ -298,6 +306,8 @@ def PrintAllGamesInfo(list):
 # DRIVER FUNCTION
 def main():
 	global NUM_RECOMMENDED_GAMES
+
+	loadEnvironment()
 
 	CheckArguments(TOTAL_ARGUMENTS)
 
