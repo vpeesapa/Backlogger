@@ -1,13 +1,9 @@
 import os
 import sys
-import csv
 import random
 import requests
 from dotenv import load_dotenv
-
-# GLOBAL VARIABLES
-TOTAL_ARGUMENTS = 4
-NUM_RECOMMENDED_GAMES = 0
+from flask import Flask,request,jsonify
 
 # Master list consisting of info for all games
 GAMES_MASTER_LIST = []
@@ -31,6 +27,30 @@ PS4 = "PS4"
 NINTENDO_GAMEBOY = "Nintendo Gameboy"
 NINTENDO_DS = "Nintendo DS"
 NINTENDO_3DS = "Nintendo 3DS"
+
+# Data structures to check for validity of input
+VALID_STATUS = {
+	"backlog": BACKLOG,
+	"complete": COMPLETE,
+	"wishlist": WISHLIST,
+	"dropped": DROPPED,
+	"in_progress": IN_PROGRESS
+}
+
+VALID_PLATFORMS = {
+	"steam": PC_STEAM,
+	"nintendo_switch": NINTENDO_SWITCH,
+	"epic": PC_EPIC,
+	"ps5": PS5,
+	"xbox_game_pass": XBOX_GAME_PASS,
+	"ps4": PS4,
+	"nintendo_gameboy": NINTENDO_GAMEBOY,
+	"nintendo_ds": NINTENDO_DS,
+	"nintendo_3ds": NINTENDO_3DS
+}
+
+# Create an instance of the backend application
+app = Flask(__name__)
 
 # GAME CLASS
 class Game:
@@ -78,6 +98,19 @@ class Game:
 		print("Backloggd Score: " + str(self.backloggdScore))
 		print()
 
+	def ToDict(self):
+		return {
+			"name": self.name,
+			"platform": self.platform,
+			"developer": self.developer,
+			"year": self.year,
+			"completionTime": self.completionTime,
+			"status": self.status,
+			"genres": self.genres,
+			"score": self.score,
+			"backloggdScore": self.backloggdScore
+		}
+
 def AppendToArray(list):
 	finalList = []
 
@@ -105,76 +138,6 @@ def AddGameToMasterList(game):
 
 def loadEnvironment():
 	load_dotenv()
-
-def CheckArguments(totalArguments):
-	if len(sys.argv) != totalArguments:
-		print("Arguments required. Correct format: py backlogger.py <platform> <status> <Number of required recommendations>")
-		print("Valid platforms: PC_STEAM, NINTENDO_SWITCH, PC_EPIC, PS5, XBOX_GAME_PASS, PS4, NINTENDO_GAMEBOY, NINTENDO_DS, NINTENDO_3DS")
-		print("Valid status: BACKLOG, COMPLETE, WISHLIST, DROPPED, IN_PROGRESS")
-
-		sys.exit(0)
-
-	if int(sys.argv[3]) <= 0:
-		print("Number of required recommendations has to be a positive non-zero integer")
-
-		sys.exit(0)
-
-def GetPlatform():
-	platformIdentifier = sys.argv[1].upper()
-
-	platform = ""
-
-	if platformIdentifier == "PC_STEAM":
-		platform = PC_STEAM
-	elif platformIdentifier == "NINTENDO_SWITCH":
-		platform = NINTENDO_SWITCH
-	elif platformIdentifier == "PC_EPIC":
-		platform = PC_EPIC
-	elif platformIdentifier == "PS5":
-		platform = PS5
-	elif platformIdentifier == "XBOX_GAME_PASS":
-		platform = XBOX_GAME_PASS
-	elif platformIdentifier == "PS4":
-		platform = PS4
-	elif platformIdentifier == "NINTENDO_GAMEBOY":
-		platform = NINTENDO_GAMEBOY
-	elif platformIdentifier == "NINTENDO_DS":
-		platform = "NINTENDO_DS"
-	elif platformIdentifier == "NINTENDO_3DS":
-		platform = NINTENDO_3DS
-
-	if len(platform) == 0:
-		print("Invalid platform entered. Please try again!")
-
-		sys.exit(0)
-
-	return platform
-
-def GetStatus():
-	statusIdentifier = sys.argv[2].upper()
-
-	status = ""
-
-	if statusIdentifier == "BACKLOG":
-		status = BACKLOG;
-	elif statusIdentifier == "COMPLETE":
-		status = COMPLETE
-	elif statusIdentifier == "WISHLIST":
-		status = WISHLIST
-	elif statusIdentifier == "DROPPED":
-		status = DROPPED
-	elif statusIdentifier == "IN_PROGRESS":
-		status = IN_PROGRESS
-
-	if len(status) == 0:
-		print("Invalid status entered. Please try again!")
-
-		sys.exit(0)
-
-	return status
-
-def GetRecommendationsNumber():
-	return int(sys.argv[3])
 
 def GetSheetData():
 	sheetId = os.getenv("SHEET_ID")
@@ -250,7 +213,7 @@ def PopulateLists():
 
 		DifferentiateGamesByPlatform(gamesInfo)
 		
-def RecommendGames(list):
+def RecommendGames(list,numRecommended):
 	recommendedGames = []
 
 	# Use this integer to keep track of the number of games that have already been recommended
@@ -259,10 +222,10 @@ def RecommendGames(list):
 	totalRecommendedGames = 0
 
 	# Check to ensure that there is no infinite looping
-	if NUM_RECOMMENDED_GAMES > len(list):
+	if numRecommended > len(list):
 		totalRecommendedGames = len(list)
 	else:
-		totalRecommendedGames = NUM_RECOMMENDED_GAMES
+		totalRecommendedGames = numRecommended
 
 	print(f"Recommending {totalRecommendedGames} out of a total of {len(list)} games!")
 
@@ -278,19 +241,103 @@ def RecommendGames(list):
 	
 	return recommendedGames
 
-def RecommendGamesByPlatform(platform,status):
-	# Getting all the backlogged games in the platform
+def RecommendGamesWrapper(platform,status,numRecommended):
 	eligibleGames = []
 	for gamesInfo in GAMES_BY_PLATFORM[platform]:
 		if gamesInfo.status == status:
 			eligibleGames.append(gamesInfo)
 
-	return RecommendGames(eligibleGames)
+	return RecommendGames(eligibleGames,numRecommended)
 
 def PrintNumberOfGamesPerPlatform():
 	print("The number of games per platform is as follows: ")
 	for key in GAMES_BY_PLATFORM.keys():
 		print(key + ": " + str(len(GAMES_BY_PLATFORM[key])))
+
+# APIs
+@app.route("/games_by_platform",methods=["GET"])
+def fetchAllGamesByPlatform():
+	allGamesByPlatform = {}
+
+	for key in GAMES_BY_PLATFORM.keys():
+		gamesByPlatform = []
+
+		for game in GAMES_BY_PLATFORM[key]:
+			gamesByPlatform.append(game.ToDict())
+
+		allGamesByPlatform[key] = gamesByPlatform
+
+	return jsonify(allGamesByPlatform),200
+
+@app.route("/games_on_platform/<string:platform>",methods=["GET"])
+def fetchGamesOnPlatform(platform):
+	if platform not in VALID_PLATFORMS:
+		return jsonify(f"{platform} is not a valid platform!"),400
+
+	gamesOnPlatform = []
+
+	games = GAMES_BY_PLATFORM[VALID_PLATFORMS[platform]]
+	for game in games:
+		gamesOnPlatform.append(game.ToDict())
+
+	return jsonify(gamesOnPlatform),200
+
+@app.route("/all_games_by_status",methods=["GET"])
+def fetchAllGamesByStatus():
+	allGamesByStatus = {}
+
+	for key in GAMES_BY_STATUS.keys():
+		gamesByStatus = []
+
+		for game in GAMES_BY_STATUS[key]:
+			gamesByStatus.append(game.ToDict())
+
+		allGamesByStatus[key] = gamesByStatus
+
+	return jsonify(allGamesByStatus),200
+
+@app.route("/games_by_status/<string:status>",methods=["GET"])
+def fetchGamesByStatus(status):
+	if status not in VALID_STATUS:
+		return jsonify(f"{status} is not a valid status!"),400
+
+	gamesByStatus = []
+
+	games = GAMES_BY_STATUS[VALID_STATUS[status]]
+	for game in games:
+		gamesByStatus.append(game.ToDict())
+
+	return jsonify(gamesByStatus),200
+
+@app.route("/recommend",methods=["GET"])
+def recommend():
+	data = request.get_json()
+
+	if not data:
+		return jsonify("Can only recommend if certain data is passed!"),400
+
+	if data["status"] not in VALID_STATUS:
+		return jsonify(f"{data['status']} is not a valid status!"),400
+
+	if data["platform"] not in VALID_PLATFORMS:
+		return jsonify(f"{data['platform']} is not a valid platform!"),400
+
+	if type(data["numRecommended"]) is not int or data["numRecommended"] <= 0:
+		return jsonify("The number of recommended games can only be a positive integer"),400
+
+	validStatus = VALID_STATUS[data["status"]]
+	validPlatform = VALID_PLATFORMS[data["platform"]]
+	numRecommended = data["numRecommended"]
+
+	recommendedGames = RecommendGamesWrapper(validPlatform,validStatus,numRecommended)
+
+	recommendedGamesResponse = []
+
+	for game in recommendedGames:
+		recommendedGamesResponse.append(game.ToDict())
+
+	return jsonify(recommendedGamesResponse),200
+
 
 # PRINTING FUNCTIONS
 def PrintAllGamesInfo(list):
@@ -305,17 +352,8 @@ def PrintAllGamesInfo(list):
 
 # DRIVER FUNCTION
 def main():
-	global NUM_RECOMMENDED_GAMES
-
+	print("Fetching data from Google Sheets...")
 	loadEnvironment()
-
-	CheckArguments(TOTAL_ARGUMENTS)
-
-	platform = GetPlatform()
-
-	status = GetStatus()
-
-	NUM_RECOMMENDED_GAMES = GetRecommendationsNumber()
 
 	sheetData = GetSheetData()
 
@@ -323,15 +361,15 @@ def main():
 		print("Failed to fetch data from Google Sheets API")
 		return
 
+	print("Processing fetched data...")
+
 	ParseSheetData(sheetData)
 
 	PopulateLists()
 
-	recommendedGames = RecommendGamesByPlatform(platform,status)
+	print("Starting the server...")
 
-	PrintAllGamesInfo(recommendedGames)
-
-	PrintNumberOfGamesPerPlatform()
+	app.run(debug=True,port=6000)
 
 if __name__ == "__main__":
 	main()
