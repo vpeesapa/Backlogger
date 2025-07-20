@@ -2,6 +2,7 @@ import os
 import sys
 import random
 import requests
+import logging
 from dotenv import load_dotenv
 from flask import Flask,request,jsonify
 
@@ -51,6 +52,24 @@ VALID_PLATFORMS = {
 
 # Create an instance of the backend application
 app = Flask(__name__)
+
+# LOG CONFIGURATIONS
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Console handler
+consoleHandler = logging.StreamHandler()
+consoleHandler.setLevel(logging.INFO)
+consoleHandler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+
+# File handler
+fileHandler = logging.FileHandler("backlogger.log")
+fileHandler.setLevel(logging.INFO)
+fileHandler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+
+# Add both the handlers to the loggers
+logger.addHandler(consoleHandler)
+logger.addHandler(fileHandler)
 
 # GAME CLASS
 class Game:
@@ -157,7 +176,7 @@ def GetSheetData():
 		return data
 	except requests.exceptions.RequestException as e:
 		# Handle errors that occur during the request
-		print(f"An error occured: {e}")
+		logger.error(f"An error occured: {e}")
 
 		return None
 
@@ -227,7 +246,7 @@ def RecommendGames(list,numRecommended):
 	else:
 		totalRecommendedGames = numRecommended
 
-	print(f"Recommending {totalRecommendedGames} out of a total of {len(list)} games!")
+	logger.info(f"Recommending {totalRecommendedGames} out of a total of {len(list)} games!")
 
 	while currentNumRecommendedGames < totalRecommendedGames:
 		# Select a random game from the list of backlog games
@@ -338,6 +357,23 @@ def recommend():
 
 	return jsonify(recommendedGamesResponse),200
 
+@app.route("/games_distribution_per_status",methods=["GET"])
+def fetchGamesDistributionPerStatus():
+	gamesPerStatus = {}
+
+	for key in GAMES_BY_STATUS.keys():
+		gamesPerStatus[key] = len(GAMES_BY_STATUS[key])
+
+	return jsonify(gamesPerStatus),200
+
+@app.route("/games_distribution_per_platform",methods=["GET"])
+def fetchGamesDistributionPerPlatform():
+	gamesPerPlatform = {}
+
+	for key in GAMES_BY_PLATFORM.keys():
+		gamesPerPlatform[key] = len(GAMES_BY_PLATFORM[key])
+
+	return jsonify(gamesPerPlatform),200
 
 # PRINTING FUNCTIONS
 def PrintAllGamesInfo(list):
@@ -352,22 +388,22 @@ def PrintAllGamesInfo(list):
 
 # DRIVER FUNCTION
 def main():
-	print("Fetching data from Google Sheets...")
+	logger.info("Fetching data from Google Sheets...")
 	loadEnvironment()
 
 	sheetData = GetSheetData()
 
 	if not sheetData:
-		print("Failed to fetch data from Google Sheets API")
+		logger.error("Failed to fetch data from Google Sheets API")
 		return
 
-	print("Processing fetched data...")
+	logger.info("Processing fetched data...")
 
 	ParseSheetData(sheetData)
 
 	PopulateLists()
 
-	print("Starting the server...")
+	logger.info("Starting the server...")
 
 	app.run(debug=True,port=6000)
 
