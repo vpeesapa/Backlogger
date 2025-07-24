@@ -1,16 +1,17 @@
-import * as React from "react"
+import * as React from "react";
 import { AppBar, Box, Button, Stack, Toolbar, Typography } from "@mui/material";
+import { appBarStyles, buttonStyles, typographyStyles } from "../styles";
 
 function NavBar(props) {
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: '#00802b' }}>
+            <AppBar position="static" sx={appBarStyles}>
                 <Toolbar>
-                    <Stack direction={"row"} spacing={155}>
-                        <Typography variant="h3" color="inherit" sx={{ mr: 2,fontSize: 35 }}>
+                    <Stack direction={"row"} spacing={150}>
+                        <Typography variant="h3" color="inherit" sx={typographyStyles}>
                             Varun's Perpetual Backlog
                         </Typography>
-                        <Button variant="contained" sx={{ backgroundColor: '#809fff' }}>
+                        <Button variant="contained" sx={buttonStyles}>
                             Recommend Me!
                         </Button>
                     </Stack>
