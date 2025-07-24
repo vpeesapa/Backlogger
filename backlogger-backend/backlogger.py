@@ -73,8 +73,9 @@ logger.addHandler(fileHandler)
 
 # GAME CLASS
 class Game:
-	def __init__(self,name,platform,developer,year,completionTime,status,genres,score,backloggdScore):
+	def __init__(self,name,coverImageLink,platform,developer,year,completionTime,status,genres,score,backloggdScore):
 		self.name = name
+		self.coverImageLink = coverImageLink
 		self.platform = platform
 
 		# The game could have multiple developers, so it's better to have a list
@@ -107,6 +108,7 @@ class Game:
 
 	def PrintGameInfo(self):
 		print("Name: " + self.name)
+		print("Cover Image Link: " + self.coverImageLink)
 		print("Platform: " + self.platform)
 		print("Developer: " + str(self.developer))
 		print("Year: " + str(self.year))
@@ -120,6 +122,7 @@ class Game:
 	def ToDict(self):
 		return {
 			"name": self.name,
+			"coverImageLink": self.coverImageLink,
 			"platform": self.platform,
 			"developer": self.developer,
 			"year": self.year,
@@ -142,16 +145,17 @@ def AppendToArray(list):
 
 def AddGameToMasterList(game):
 	name = game[0]
-	platform = game[1]
-	developer = game[2]
-	year = game[3]
-	completionTime = game[4]
-	status = game[5]
-	genres = game[6]
-	score = game[7]
-	backloggdScore = game[8]
+	coverImageLink = game[1]
+	platform = game[2]
+	developer = game[3]
+	year = game[4]
+	completionTime = game[5]
+	status = game[6]
+	genres = game[7]
+	score = game[8]
+	backloggdScore = game[9]
 
-	newGame = Game(name,platform,developer,year,completionTime,status,genres,score,backloggdScore)
+	newGame = Game(name,coverImageLink,platform,developer,year,completionTime,status,genres,score,backloggdScore)
 
 	GAMES_MASTER_LIST.append(newGame)
 
