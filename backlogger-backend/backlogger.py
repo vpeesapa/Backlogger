@@ -5,6 +5,7 @@ import requests
 import logging
 from dotenv import load_dotenv
 from flask import Flask,request,jsonify
+from flask_cors import CORS
 
 # Master list consisting of info for all games
 GAMES_MASTER_LIST = []
@@ -52,6 +53,8 @@ VALID_PLATFORMS = {
 
 # Create an instance of the backend application
 app = Flask(__name__)
+CORS(app,resources={r"*": {"origins": "http://localhost:3000"}})
+
 
 # LOG CONFIGURATIONS
 logger = logging.getLogger(__name__)
@@ -412,7 +415,7 @@ def main():
 
 	logger.info("Starting the server...")
 
-	app.run(debug=True,port=6000)
+	app.run(debug=True,port=8090)
 
 if __name__ == "__main__":
 	main()
