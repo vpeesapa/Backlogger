@@ -236,7 +236,7 @@ def PopulateLists():
 
 		DifferentiateGamesByPlatform(gamesInfo)
 		
-def RecommendGames(list,numRecommended):
+def RecommendGames(lst,numRecommended):
 	recommendedGames = []
 
 	# Use this integer to keep track of the number of games that have already been recommended
@@ -244,17 +244,20 @@ def RecommendGames(list,numRecommended):
 
 	totalRecommendedGames = 0
 
+	# Filtering the list to avoid recommending unreleased games
+	filteredList = list(filter(lambda x: x.year != "-",lst))
+
 	# Check to ensure that there is no infinite looping
-	if numRecommended > len(list):
-		totalRecommendedGames = len(list)
+	if numRecommended > len(filteredList):
+		totalRecommendedGames = len(filteredList)
 	else:
 		totalRecommendedGames = numRecommended
 
-	logger.info(f"Recommending {totalRecommendedGames} out of a total of {len(list)} games!")
+	logger.info(f"Recommending {totalRecommendedGames} out of a total of {len(filteredList)} games!")
 
 	while currentNumRecommendedGames < totalRecommendedGames:
 		# Select a random game from the list of backlog games
-		recommendedGame = random.choice(list)
+		recommendedGame = random.choice(filteredList)
 
 		if recommendedGame not in recommendedGames:
 			recommendedGames.append(recommendedGame)
