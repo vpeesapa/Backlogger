@@ -2,15 +2,12 @@ import * as React from 'react';
 import axios from 'axios';
 import {
     Box,
-    IconButton,
-    ImageList,
-    ImageListItem,
-    ImageListItemBar,
     Stack,
     Tab,
     Tabs
 } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import GamesContent from './GamesContent';
+import StatsContent from './StatsContent';
 
 const platformFilters = [
     "PC (Steam)",
@@ -32,18 +29,29 @@ const statusFilters = [
     "Dropped"
 ];
 
+const statsFilters = [
+    "Platform",
+    "Status"
+]
+
 function Content(props) {
     const [statusData,setStatusData] = React.useState({});
     const [platformData,setPlatformData] = React.useState({});
+    const [platformDistributionData,setPlatformDistributionData] = React.useState({});
+    const [statusDistributionData,setStatusDistributionData] = React.useState({});
     const [displayData,setDisplayData] = React.useState([]);
-    const [currentFilters,setCurrentFilters] = React.useState(platformFilters);
 
+    const [currentFilters,setCurrentFilters] = React.useState(platformFilters);
     const [selectedType,setSelectedType] = React.useState("Platform");
     const [selectedOption,setSelectedOption] = React.useState(platformFilters[0]);
+
+    const [displayGames,setDisplayGames] = React.useState(true);
 
     React.useEffect(() => {
         fetchPlatformData();
         fetchStatusData();
+        fetchPlatformDistributionData();
+        fetchStatusDistributionData();
     },[]);
 
     const fetchPlatformData = () => {
@@ -67,19 +75,45 @@ function Content(props) {
             });
     };
 
+    const fetchPlatformDistributionData = () => {
+        axios.get("http://localhost:8090/games_distribution_per_platform")
+            .then(response => {
+                setPlatformDistributionData(response.data);
+            }).catch(e => {
+                console.error(e);
+            })
+    };
+
+    const fetchStatusDistributionData = () => {
+        axios.get("http://localhost:8090/games_distribution_per_status")
+            .then(response => {
+                setStatusDistributionData(response.data);
+            }).catch(e => {
+                console.error(e);
+            })
+    };
+
     const handleChangeType = (event,newValue) => {
         event.preventDefault();
 
         if(newValue === "Platform") {
+            setDisplayGames(true);
             setSelectedType("Platform");
             setCurrentFilters(platformFilters);
             setSelectedOption(platformFilters[0]);
             setDisplayData(platformData[platformFilters[0]]);
         } else if(newValue === "Status") {
+            setDisplayGames(true);
             setSelectedType("Status");
             setCurrentFilters(statusFilters);
             setSelectedOption(statusFilters[0]);
             setDisplayData(statusData[statusFilters[0]]);
+        } else if(newValue === "Stats") {
+            setDisplayGames(false);
+            setSelectedType("Stats");
+            setCurrentFilters(statsFilters);
+            setSelectedOption(statsFilters[0]);
+            setDisplayData(platformDistributionData);
         }
     }
 
@@ -92,6 +126,8 @@ function Content(props) {
             setDisplayData(platformData[newValue]);
         } else if(selectedType === "Status") {
             setDisplayData(statusData[newValue]);
+        } else if(selectedType === "Stats") {
+            setDisplayData(newValue === "Platform" ? platformDistributionData : statusDistributionData);
         }
     };
 
@@ -120,6 +156,15 @@ function Content(props) {
                             fontWeight: 'bold'
                         }}
                     />
+                    <Tab
+                        label={"Stats"}
+                        value={"Stats"}
+                        sx={{
+                            color: '#00802b',
+                            fontFamily: 'monospace',
+                            fontWeight: 'bold'
+                        }}
+                    />
                 </Tabs>
                 <Tabs
                     value={selectedOption}
@@ -142,31 +187,13 @@ function Content(props) {
                         })
                     }
                 </Tabs>
-                <ImageList cols={6} sx={{ paddingX: 10 }}>
-                    {
-                        displayData && displayData.map((data) => {
-                            return (
-                                <ImageListItem key={data["name"]}>
-                                    <img
-                                        srcSet={`${data["coverImageLink"]}`}
-                                        src={`${data["coverImageLink"]}`}
-                                        alt={data["name"]}
-                                        loading='lazy'
-                                    />
-                                    <ImageListItemBar
-                                        title={data["name"]}
-                                        subtitle={String(data["developer"])}
-                                        actionIcon={
-                                            <IconButton>
-                                                <VisibilityIcon sx={{ color: 'white' }} />
-                                            </IconButton>
-                                        }
-                                    />
-                                </ImageListItem>
-                            );
-                        })
-                    }
-                </ImageList>
+                {
+                    displayGames ? (
+                        <GamesContent displayData={displayData} />
+                    ) : (
+                        <StatsContent displayData={displayData} />
+                    )
+                }
             </Stack>
         </Box>
     );
