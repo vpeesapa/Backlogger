@@ -9,31 +9,8 @@ import {
 import GamesContent from './GamesContent';
 import StatsContent from './StatsContent';
 import { tabStyles } from '../styles';
-
-const platformFilters = [
-    "PC (Steam)",
-    "Nintendo Switch",
-    "PC (Epic)",
-    "PS5",
-    "Xbox Game Pass",
-    "PS4",
-    "Nintendo Gameboy",
-    "Nintendo DS",
-    "Nintendo 3DS"
-];
-
-const statusFilters = [
-    "Wishlist",
-    "Backlog",
-    "In Progress",
-    "Complete",
-    "Dropped"
-];
-
-const statsFilters = [
-    "Platform",
-    "Status"
-]
+import RecommendationContent from './RecommendationContent';
+import { platformFilters, statsFilters, statusFilters } from '../Constants';
 
 function Content(props) {
     const [statusData,setStatusData] = React.useState({});
@@ -215,7 +192,9 @@ function Content(props) {
                     ) : (
                         displayStats ? (
                             <StatsContent displayData={displayData} />
-                        ) : null
+                        ) : (
+                            <RecommendationContent />
+                        )
                     )
                 }
             </Stack>

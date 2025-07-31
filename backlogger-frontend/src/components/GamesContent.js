@@ -1,5 +1,9 @@
 import * as React from "react";
-import { IconButton, ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
+import {
+    IconButton,
+    ImageList,
+    ImageListItem,ImageListItemBar
+} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 function GamesContent(props) {
