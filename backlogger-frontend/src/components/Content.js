@@ -37,8 +37,10 @@ const statsFilters = [
 function Content(props) {
     const [statusData,setStatusData] = React.useState({});
     const [platformData,setPlatformData] = React.useState({});
-    const [platformDistributionData,setPlatformDistributionData] = React.useState({});
-    const [statusDistributionData,setStatusDistributionData] = React.useState({});
+    const [statsData,setStatsData] = React.useState({
+        "Platform": {},
+        "Status": {}
+    });
     const [displayData,setDisplayData] = React.useState([]);
 
     const [currentFilters,setCurrentFilters] = React.useState(platformFilters);
@@ -55,7 +57,7 @@ function Content(props) {
     },[]);
 
     const fetchPlatformData = () => {
-        axios.get("http://localhost:8090/games_by_platform")
+        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/games_by_platform")
             .then(response => {
                 console.log(response.data);
                 
@@ -67,7 +69,7 @@ function Content(props) {
     };
 
     const fetchStatusData = () => {
-        axios.get("http://localhost:8090/all_games_by_status")
+        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/all_games_by_status")
             .then(response => {
                 setStatusData(response.data);
             }).catch(e => {
@@ -76,18 +78,28 @@ function Content(props) {
     };
 
     const fetchPlatformDistributionData = () => {
-        axios.get("http://localhost:8090/games_distribution_per_platform")
+        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/games_distribution_per_platform")
             .then(response => {
-                setPlatformDistributionData(response.data);
+                setStatsData((prevData) => {
+                    return {
+                        ...prevData,
+                        "Platform": response.data
+                    };
+                });
             }).catch(e => {
                 console.error(e);
             })
     };
 
     const fetchStatusDistributionData = () => {
-        axios.get("http://localhost:8090/games_distribution_per_status")
+        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/games_distribution_per_status")
             .then(response => {
-                setStatusDistributionData(response.data);
+                setStatsData((prevData) => {
+                    return {
+                        ...prevData,
+                        "Status": response.data
+                    };
+                });
             }).catch(e => {
                 console.error(e);
             })
@@ -113,7 +125,7 @@ function Content(props) {
             setSelectedType("Stats");
             setCurrentFilters(statsFilters);
             setSelectedOption(statsFilters[0]);
-            setDisplayData(platformDistributionData);
+            setDisplayData(statsData["Platform"]);
         }
     }
 
@@ -127,7 +139,7 @@ function Content(props) {
         } else if(selectedType === "Status") {
             setDisplayData(statusData[newValue]);
         } else if(selectedType === "Stats") {
-            setDisplayData(newValue === "Platform" ? platformDistributionData : statusDistributionData);
+            setDisplayData(statsData[newValue]);
         }
     };
 
