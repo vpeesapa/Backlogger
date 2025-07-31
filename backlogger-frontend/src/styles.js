@@ -13,3 +13,9 @@ export const buttonStyles = {
     fontFamily: 'monospace',
     fontWeight: 'bold'
 };
+
+export const tabStyles = {
+    color: '#00802b',
+    fontFamily: 'monospace',
+    fontWeight: 'bold'
+};

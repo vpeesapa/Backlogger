@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import GamesContent from './GamesContent';
 import StatsContent from './StatsContent';
+import { tabStyles } from '../styles';
 
 const platformFilters = [
     "PC (Steam)",
@@ -48,6 +49,8 @@ function Content(props) {
     const [selectedOption,setSelectedOption] = React.useState(platformFilters[0]);
 
     const [displayGames,setDisplayGames] = React.useState(true);
+    const [displayStats,setDisplayStats] = React.useState(false);
+    const [displayFilters,setDisplayFilters] = React.useState(true);
 
     React.useEffect(() => {
         fetchPlatformData();
@@ -110,22 +113,36 @@ function Content(props) {
 
         if(newValue === "Platform") {
             setDisplayGames(true);
+            setDisplayStats(false);
+            setDisplayFilters(true);
             setSelectedType("Platform");
             setCurrentFilters(platformFilters);
             setSelectedOption(platformFilters[0]);
             setDisplayData(platformData[platformFilters[0]]);
         } else if(newValue === "Status") {
             setDisplayGames(true);
+            setDisplayStats(false);
+            setDisplayFilters(true);
             setSelectedType("Status");
             setCurrentFilters(statusFilters);
             setSelectedOption(statusFilters[0]);
             setDisplayData(statusData[statusFilters[0]]);
         } else if(newValue === "Stats") {
             setDisplayGames(false);
+            setDisplayStats(true);
+            setDisplayFilters(true);
             setSelectedType("Stats");
             setCurrentFilters(statsFilters);
             setSelectedOption(statsFilters[0]);
             setDisplayData(statsData["Platform"]);
+        } else if(newValue === "Recommend") {
+            setDisplayGames(false);
+            setDisplayStats(false);
+            setDisplayFilters(false);
+            setSelectedType("Recommend");
+            setCurrentFilters([]);
+            setSelectedOption("");
+            setDisplayData([]);
         }
     }
 
@@ -153,57 +170,52 @@ function Content(props) {
                     <Tab
                         label={"Platform"}
                         value={"Platform"}
-                        sx={{
-                            color: '#00802b',
-                            fontFamily: 'monospace',
-                            fontWeight: 'bold'
-                        }}
+                        sx={tabStyles}
                     />
                     <Tab
                         label={"Status"}
                         value={"Status"}
-                        sx={{
-                            color: '#00802b',
-                            fontFamily: 'monospace',
-                            fontWeight: 'bold'
-                        }}
+                        sx={tabStyles}
                     />
                     <Tab
                         label={"Stats"}
                         value={"Stats"}
-                        sx={{
-                            color: '#00802b',
-                            fontFamily: 'monospace',
-                            fontWeight: 'bold'
-                        }}
+                        sx={tabStyles}
+                    />
+                    <Tab
+                        label={"Recommend"}
+                        value={"Recommend"}
+                        sx={tabStyles}
                     />
                 </Tabs>
-                <Tabs
-                    value={selectedOption}
-                    onChange={handleChangeFilter}
-                >
-                    {
-                        currentFilters.map((filter) => {
-                            return (
-                                <Tab
-                                    key={filter}
-                                    label={filter}
-                                    value={filter}
-                                    sx={{
-                                        color: '#00802b',
-                                        fontFamily: 'monospace',
-                                        fontWeight: 'bold'
-                                    }}
-                                />
-                            );
-                        })
-                    }
-                </Tabs>
+                {
+                    displayFilters ? (
+                        <Tabs
+                            value={selectedOption}
+                            onChange={handleChangeFilter}
+                        >
+                            {
+                                currentFilters.map((filter) => {
+                                    return (
+                                        <Tab
+                                            key={filter}
+                                            label={filter}
+                                            value={filter}
+                                            sx={tabStyles}
+                                        />
+                                    );
+                                })
+                            }
+                        </Tabs>
+                    ) : null
+                }
                 {
                     displayGames ? (
                         <GamesContent displayData={displayData} />
                     ) : (
-                        <StatsContent displayData={displayData} />
+                        displayStats ? (
+                            <StatsContent displayData={displayData} />
+                        ) : null
                     )
                 }
             </Stack>
