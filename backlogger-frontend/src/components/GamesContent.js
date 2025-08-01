@@ -52,9 +52,7 @@ function GamesContent(props) {
                 }
             </ImageList>
             {
-                open ? (
-                    <GamesContentDialog open={open} handleClose={handleDialogClose} gameData={gameData} />
-                ) : null
+                <GamesContentDialog open={open} handleClose={handleDialogClose} gameData={gameData} />
             }
         </>
     );
