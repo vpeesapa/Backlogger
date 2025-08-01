@@ -7,16 +7,23 @@ import {
     Stack,
     TextField
 } from "@mui/material";
+import axios from "axios";
+import EastIcon from '@mui/icons-material/East';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import CasinoIcon from '@mui/icons-material/Casino';
 import GamesContent from "./GamesContent";
 import { platformFilters, platformMapper, statusFilters, statusMapper } from "../Constants";
-import EastIcon from '@mui/icons-material/East';
 import { buttonStyles } from "../styles";
-import axios from "axios";
 
 const recommendButtonStyle = {
     ...buttonStyles,
     width: '8%'
 };
+
+const displayButtonStyle = {
+    ...buttonStyles,
+    width: '9%'
+}
 
 function RecommendationContent(props) {
     const [recommendationPayload,setRecommendationPayload] = React.useState({
@@ -53,19 +60,32 @@ function RecommendationContent(props) {
     };
 
     const handleRecommendation = (event) => {
-        setRecommendationPayload({
+        const payload = {
             "status": statusMapper[selectedStatus],
             "platform": platformMapper[selectedPlatform],
             "numRecommended": selectedNumber
-        });
+        };
 
-        axios.post(process.env.REACT_APP_BACKEND_API_URL + "/recommend",recommendationPayload)
+        fetchRecommendationData(payload);
+    };
+
+    const fetchRecommendationData = (payload) => {
+        axios.post(process.env.REACT_APP_BACKEND_API_URL + "/recommend",payload)
             .then(response => {
                 setDisplayForm(false);
+                setRecommendationPayload(payload);
                 setRecommendationData(response.data);
             }).catch(e => {
                 console.error(e);
             });
+    };
+
+    const handleReroll = (event) => {
+        fetchRecommendationData(recommendationPayload);
+    };
+
+    const handleFormReturn = (event) => {
+        setDisplayForm(true);
     };
 
     return (
@@ -135,7 +155,27 @@ function RecommendationContent(props) {
                         </Button>
                     </Stack>
                 ) : (
-                    <GamesContent displayData={recommendationData} />
+                    <Box sx={{ width: '100%' }}>
+                        <GamesContent displayData={recommendationData} />
+                        <Stack direction={"row"} spacing={2} sx={{ width: '100%',justifyContent: 'center' }}>
+                            <Button
+                                variant="contained"
+                                onClick={handleFormReturn}
+                                startIcon={<KeyboardBackspaceIcon />}
+                                sx={displayButtonStyle}
+                            >
+                                Back to form
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleReroll}
+                                endIcon={<CasinoIcon />}
+                                sx={displayButtonStyle}
+                            >
+                                Roll again
+                            </Button>
+                        </Stack>
+                    </Box>
                 )
             }
         </Box>
