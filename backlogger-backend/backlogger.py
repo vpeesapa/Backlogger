@@ -338,7 +338,7 @@ def fetchGamesByStatus(status):
 
 	return jsonify(gamesByStatus),200
 
-@app.route("/recommend",methods=["GET"])
+@app.route("/recommend",methods=["POST"])
 def recommend():
 	data = request.get_json()
 
