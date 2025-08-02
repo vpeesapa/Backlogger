@@ -10,7 +10,7 @@ import GamesContent from './GamesContent';
 import StatsContent from './StatsContent';
 import { tabStyles } from '../styles';
 import RecommendationContent from './RecommendationContent';
-import { platformFilters, statsFilters, statusFilters } from '../Constants';
+import { platformFilters, statsFilters, statusFilters } from '../Commons';
 
 function Content(props) {
     const [statusData,setStatusData] = React.useState({});
@@ -186,17 +186,19 @@ function Content(props) {
                         </Tabs>
                     ) : null
                 }
-                {
-                    displayGames ? (
-                        <GamesContent displayData={displayData} />
-                    ) : (
-                        displayStats ? (
-                            <StatsContent displayData={displayData} />
+                <Box paddingTop={2} sx={{ width: '100%' }}>
+                    {
+                        displayGames ? (
+                            <GamesContent displayData={displayData} />
                         ) : (
-                            <RecommendationContent />
+                            displayStats ? (
+                                <StatsContent displayData={displayData} />
+                            ) : (
+                                <RecommendationContent />
+                            )
                         )
-                    )
-                }
+                    }
+                </Box>
             </Stack>
         </Box>
     );

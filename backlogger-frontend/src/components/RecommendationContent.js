@@ -12,7 +12,7 @@ import EastIcon from '@mui/icons-material/East';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import CasinoIcon from '@mui/icons-material/Casino';
 import GamesContent from "./GamesContent";
-import { platformFilters, platformMapper, statusFilters, statusMapper } from "../Constants";
+import { platformFilters, platformMapper, statusFilters, statusMapper } from "../Commons";
 import { buttonStyles } from "../styles";
 
 const recommendButtonStyle = {
