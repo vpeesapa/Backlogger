@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from 'axios';
 import {
     Box,
     Stack,
@@ -8,9 +7,10 @@ import {
 } from '@mui/material';
 import GamesContent from './GamesContent';
 import StatsContent from './StatsContent';
-import { tabStyles } from '../styles';
 import RecommendationContent from './RecommendationContent';
+import { tabStyles } from '../styles';
 import { platformFilters, statsFilters, statusFilters } from '../Commons';
+import { fetchPlatformDataService, fetchPlatformDistributionDataService, fetchStatusDataService, fetchStatusDistributionDataService } from '../services/ApiService';
 
 function Content(props) {
     const [statusData,setStatusData] = React.useState({});
@@ -37,52 +37,50 @@ function Content(props) {
     },[]);
 
     const fetchPlatformData = () => {
-        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/games_by_platform")
-            .then(response => {
-                console.log(response.data);
-                
-                setPlatformData(response.data);
-                setDisplayData(response.data[platformFilters[0]]);
+        fetchPlatformDataService()
+            .then(responseData => {
+                setPlatformData(responseData);
+                setDisplayData(responseData[platformFilters[0]]);
             }).catch(e => {
                 console.error(e);
             });
     };
 
     const fetchStatusData = () => {
-        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/all_games_by_status")
-            .then(response => {
-                setStatusData(response.data);
+        fetchStatusDataService()
+            .then(responseData => {
+                setStatusData(responseData);
             }).catch(e => {
                 console.error(e);
             });
     };
 
     const fetchPlatformDistributionData = () => {
-        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/games_distribution_per_platform")
-            .then(response => {
+        fetchPlatformDistributionDataService()
+            .then(responseData => {
                 setStatsData((prevData) => {
                     return {
                         ...prevData,
-                        "Platform": response.data
+                        "Platform": responseData
                     };
                 });
             }).catch(e => {
                 console.error(e);
-            })
+            });
     };
 
     const fetchStatusDistributionData = () => {
-        axios.get(process.env.REACT_APP_BACKEND_API_URL + "/games_distribution_per_status")
-            .then(response => {
+        fetchStatusDistributionDataService()
+            .then(responseData => {
                 setStatsData((prevData) => {
                     return {
                         ...prevData,
-                        "Status": response.data
+                        "Status": responseData
                     };
                 });
             }).catch(e => {
                 console.error(e);
-            })
+            });
     };
 
     const handleChangeType = (event,newValue) => {

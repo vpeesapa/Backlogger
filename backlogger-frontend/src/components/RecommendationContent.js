@@ -7,13 +7,13 @@ import {
     Stack,
     TextField
 } from "@mui/material";
-import axios from "axios";
 import EastIcon from '@mui/icons-material/East';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import CasinoIcon from '@mui/icons-material/Casino';
 import GamesContent from "./GamesContent";
 import { platformFilters, platformMapper, statusFilters, statusMapper } from "../Commons";
 import { buttonStyles } from "../styles";
+import { fetchRecommendationDataService } from "../services/ApiService";
 
 const recommendButtonStyle = {
     ...buttonStyles,
@@ -70,11 +70,13 @@ function RecommendationContent(props) {
     };
 
     const fetchRecommendationData = (payload) => {
-        axios.post(process.env.REACT_APP_BACKEND_API_URL + "/recommend",payload)
-            .then(response => {
+        fetchRecommendationDataService(payload)
+            .then(responseData => {
+                console.log(responseData);
+
                 setDisplayForm(false);
                 setRecommendationPayload(payload);
-                setRecommendationData(response.data);
+                setRecommendationData(responseData);
             }).catch(e => {
                 console.error(e);
             });
