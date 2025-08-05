@@ -12,21 +12,21 @@ function GamesContentDialog(props) {
     const scoreBackgroundColor = getScoreBackgroundColor(gameData["score"]);
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="md">
-            <DialogTitle>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+            <DialogTitle sx={{ fontFamily: 'monospace',fontSize: 20 }}>
                 <b>{gameData["name"]}</b>
             </DialogTitle>
             <DialogContent dividers>
                 <Stack direction={"row"} spacing={2}>
                     <img alt={gameData["name"]} src={`${gameData["coverImageLink"]}`} style={{ height: 285,width: 225 }} />
                     <Box>
-                        <Typography>Platform: {gameData["platform"]}</Typography>
-                        <Typography>Release Date: {gameData["year"]}</Typography>
-                        <Typography>Status: {gameData["status"]}</Typography>
-                        <Typography>Developer: {stringifyArrays(gameData["developer"])}</Typography>
-                        <Typography>Genres: {stringifyArrays(gameData["genres"])}</Typography>
-                        <Typography>Completion Time: {gameData["completionTime"]} hours</Typography>
-                        <Box display={"flex"} justifyContent={"center"} alignItems={"center"} paddingTop={5}>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Platform</b>: {gameData["platform"]}</Typography>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Release Date</b>: {gameData["year"]}</Typography>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Status</b>: {gameData["status"]}</Typography>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Developer</b>: {stringifyArrays(gameData["developer"])}</Typography>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Genres</b>: {stringifyArrays(gameData["genres"])}</Typography>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Completion Time</b>: {gameData["completionTime"]} hours</Typography>
+                        <Box display={"flex"} justifyContent={"center"} alignItems={"center"} paddingTop={2}>
                             <Box
                                 sx={{
                                         borderRadius: '50%',
