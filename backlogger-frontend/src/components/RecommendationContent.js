@@ -91,7 +91,7 @@ function RecommendationContent(props) {
     };
 
     return (
-        <Box maxWidth sx={{ width: '100%',paddingTop: 2 }}>
+        <Box maxWidth sx={{ width: '100%',paddingY: 2 }}>
             {
                 displayForm ? (
                     <Stack direction={"row"} spacing={2} sx={{ width: '100%',justifyContent: 'center' }}>

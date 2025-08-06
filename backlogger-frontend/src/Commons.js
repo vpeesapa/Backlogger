@@ -98,3 +98,18 @@ export function getScoreBackgroundColor(score) {
         "color": "black"
     };
 }
+
+export function getStatusColor(status) {
+    switch(status) {
+        case "Wishlist": 
+            return "purple";
+        case "Backlog":
+            return "red";
+        case "In Progress":
+            return "darkgoldenrod";
+        case "Complete":
+            return "green";
+        default:
+            return "orange";
+    }
+}

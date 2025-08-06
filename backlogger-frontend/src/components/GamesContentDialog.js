@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Box, Dialog, DialogContent, DialogTitle, Stack, Typography } from "@mui/material";
-import { getScoreBackgroundColor, stringifyArrays } from "../Commons";
+import { getScoreBackgroundColor, getStatusColor, stringifyArrays } from "../Commons";
 
 function GamesContentDialog(props) {
     const {
@@ -9,6 +9,7 @@ function GamesContentDialog(props) {
         gameData
     } = props;
 
+    const statusColor = getStatusColor(gameData["status"]);
     const scoreBackgroundColor = getScoreBackgroundColor(gameData["score"]);
 
     return (
@@ -22,7 +23,7 @@ function GamesContentDialog(props) {
                     <Box>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Platform</b>: {gameData["platform"]}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Release Date</b>: {gameData["year"]}</Typography>
-                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Status</b>: {gameData["status"]}</Typography>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18,color: statusColor }}><b>Status</b>: {gameData["status"]}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Developer</b>: {stringifyArrays(gameData["developer"])}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Genres</b>: {stringifyArrays(gameData["genres"])}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Completion Time</b>: {gameData["completionTime"]} hours</Typography>
