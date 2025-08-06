@@ -248,7 +248,7 @@ def RecommendGames(lst,numRecommended):
 	totalRecommendedGames = 0
 
 	# Filtering the list to avoid recommending unreleased games
-	filteredList = list(filter(lambda x: x.year != "-",lst))
+	filteredList = list(filter(lambda x: x.completionTime != "-",lst))
 
 	# Check to ensure that there is no infinite looping
 	if numRecommended > len(filteredList):
