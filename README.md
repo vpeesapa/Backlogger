@@ -21,7 +21,7 @@ In this era where video games have been more accessible as ever and with numerou
 Backlogger is a game tracking application that allows gamers to keep track of the games in their library worry-free. Backlogger also comes in-built with a recommender that helps suggests games from their backlog.
 
 ## Technologies Used
-Backlogger is built on Python and Reactjs. Flask was used to create the backend application and necessary API routes. The frontend was built with components from Material UI.
+Backlogger is built on Python and Reactjs. Flask was used to create the backend application and necessary API routes. The frontend was built with components from Material UI. The data is saved inside a Google Sheets spreadsheet and is accessed by the backend application during the initial setup.
 
 ## Installation and Setup
 Backlogger's code is divided into two main components: the backend (found in `backlogger-backend`) and the frontend (found in `backlogger-frontend`).
@@ -86,6 +86,8 @@ To start the frontend server, run:
 ```bash
 npm start
 ```
+
+The frontend server will start on **port 3000** and can be verified with any web browser.
 
 ## API endpoints
 
