@@ -29,7 +29,7 @@ Backlogger's code is divided into two main components: the backend (found in `ba
 ### Backend Installation and Setup
 To access the backend from the terminal (or Git BASH), run the following command:
 ```bash
-$ cd backlogger-backend
+cd backlogger-backend
 ```
 
 Backlogger was tested on [Python 3.13.5](https://www.python.org/downloads/release/python-3135/) on Windows, but the basic installation and setup should be applicable to Linux and MacOs as well. If installing Python on Windows, ensure that it is also added to the system variables ([steps here](https://www.digitalocean.com/community/tutorials/install-python-windows-10)).
@@ -42,27 +42,27 @@ For clean package management between projects, I also recommend creating a virtu
 
 The virtual environment can be created and activated as follows:
 ```bash
-$ python -m venv .venv          # Creates the virtual environment
+python -m venv .venv          # Creates the virtual environment
 
-$ source .venv/bin/activate     # For MacOS/Linux
+source .venv/bin/activate     # For MacOS/Linux
   OR
-$ source .venv/Scripts/activate # For Windows
+source .venv/Scripts/activate # For Windows
 ```
 
 To deactivate it, simply run:
 ```bash
-$ deactivate
+deactivate
 ```
 ___
 
 The `requirements.txt` found here contains all the packages that the backend application has dependencies with. For a quick installation of all packages, run:
 ```bash
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 To start the backend application, run this command:
 ```bash
-$ python backlogger.py
+python backlogger.py
 ```
 
 With this, the backend application would be running on **port 8089**, which you can either verify through [Postman](https://www.postman.com/) or a web browser of your choice using the endpoints mentioned in the following section.
