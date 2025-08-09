@@ -9,6 +9,13 @@
     - [Optional: Setup the Virtual Environment](#optional-setup-the-virtual-environment)
   - [Frontend Installation and Setup](#frontend-setup-and-installation)
 - [API Endpoints](#api-endpoints)
+  - [GET /games_by_platform](#get-games_by_platform)
+  - [GET /games_on_platform/<platform>](#get-games_on_platform)
+  - [GET /all_games_by_status](#get-all_games_by_status)
+  - [GET /games_by_status/<status>](#get-games_by_status)
+  - [POST /recommend](#post-recommend)
+  - [GET /games_distribution_per_status](#get-games_distribution_per_status)
+  - [GET /games-distribution_per_platform](#get-games-distribution_per_platform)
 - [Future Improvements](#future-improvements)
 - [Credits](#credits)
 
@@ -91,7 +98,28 @@ The frontend server will start on **port 3000** and can be verified with any web
 
 ## API endpoints
 
+### GET /games_by_platform
+
+### GET /games_on_platform/<platform>
+
+### GET /all_games_by_status
+
+### GET /games_by_status/<status>
+
+### POST /recommend
+
+### GET /games_distribution_per_status
+
+### GET /games-distribution_per_platform
+
 ## Future Improvements
+- Improve frontend styling to be more responsive on different displays.
+- Modularize backend logic into smaller scripts.
+- Create a start up script to automatically run the backend server.
+  - Extend the script's functionality so that the initial setup can also be done through this script.
+- Add CRUD functionalities:
+  - Allow users to add new entries that will also be saved in the spreadsheet.
+  - Allow users to update existing entries and saved in the spreadsheet.
 
 ## Credits
 All images for the games displayed were taken from [backloggd.com](https://backloggd.com/). Similarly, completion times were taken from [howlongtobeat.com](https://howlongtobeat.com/).
