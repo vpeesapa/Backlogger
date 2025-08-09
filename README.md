@@ -68,6 +68,24 @@ python backlogger.py
 With this, the backend application would be running on **port 8089**, which you can either verify through [Postman](https://www.postman.com/) or a web browser of your choice using the endpoints mentioned in the following section.
 
 ### Frontend Setup and Installation
+Similarly, the frontend is accessible from the terminal (or Git BASH) with the following command:
+```bash
+cd backlogger-frontend
+```
+
+As mentioned earlier, Backlogger's frontend runs on Reactjs, so [**Node.js**](https://nodejs.org/en) and [**npm**](https://www.npmjs.com/) are a requirement in order to run it. The frontend was tested on Node.js `v22.17.1` and npm `v11.4.2`.
+
+**Note**: Both `Node.js` and `npm` can be installed from here: https://nodejs.org/en/download.
+
+Internally, the frontend uses some packages to render different components. To install all the packages, run the following command:
+```bash
+npm install
+```
+
+To start the frontend server, run:
+```bash
+npm start
+```
 
 ## API endpoints
 
