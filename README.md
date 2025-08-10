@@ -99,27 +99,111 @@ The frontend server will start on **port 3000** and can be verified with any web
 ## API endpoints
 
 ### GET /games_by_platform
+**Description**: Returns all games filtered by the platform.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/games_by_platform'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched all games filtered by the platform.
 
 ### GET /games_on_platform/<platform>
+**Description**: Returns the list of games belonging to a particular platform.
+
+**Query Parameters**:
+- `platform`: The platform that the games should belong to.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/games_on_platform/xbox_game_pass'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched the list of games on that platform.
+- **400 ERROR**: Invalid value for `platform` was passed.
 
 ### GET /all_games_by_status
+**Description**: Returns all games filtered by their status (i.e Backlog, Complete, etc.).
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/all_games_by_status'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched all games filtered by their status.
 
 ### GET /games_by_status/<status>
+**Description**: Returns the list of games with the specified completion status.
+
+**Query Parameters**:
+- `status`: The completion status of the games.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/games_by_status/wishlist'
+```
+
+**HTTP Response Codes**:
+- **200 OK**": Successfully fetched the list of games with the specified completion status.
+- **400 ERROR**: Invalid value for `status` was passed.
 
 ### POST /recommend
+**Description**: Recommends a certain number of games based on the platform and completion status.
+
+**Query Parameters**:
+- `platform`: The platform of the games to query.
+- `status`: The completion status of the games to query.
+- `numRecommended`: The number of games to recommend matching the criteria.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/recommend' \
+--header 'Content-Type: application/json' \
+--data '{
+    "platform": "steam",
+    "status": "wishlist",
+    "numRecommended": 32
+}'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully recommends games based on the input criteria.
+- **400 ERROR**: Invalid values given in the input criteria.
 
 ### GET /games_distribution_per_status
+**Description**: Returns the distribution of games based on their completion status.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/games_distribution_per_status'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched the distribution of games based on their completion status.
 
 ### GET /games-distribution_per_platform
+**Description**: Returns the distribution of games based on their platform.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/games_distribution_per_platform'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched the distribution of games based on their platform.
 
 ## Future Improvements
 - Improve frontend styling to be more responsive on different displays.
-- Modularize backend logic into smaller scripts.
+- Modularize backend logic into smaller scripts in compliance with modern standards.
 - Create a start up script to automatically run the backend server.
   - Extend the script's functionality so that the initial setup can also be done through this script.
 - Add CRUD functionalities:
   - Allow users to add new entries that will also be saved in the spreadsheet.
   - Allow users to update existing entries and saved in the spreadsheet.
+- Centralize error handling in the backend.
 
 ## Credits
 All images for the games displayed were taken from [backloggd.com](https://backloggd.com/). Similarly, completion times were taken from [howlongtobeat.com](https://howlongtobeat.com/).
