@@ -152,7 +152,7 @@ curl --location 'localhost:8090/games_by_status/wishlist'
 ### POST /recommend
 **Description**: Recommends a certain number of games based on the platform and completion status.
 
-**Query Parameters**:
+**Request Header**:
 - `platform`: The platform of the games to query.
 - `status`: The completion status of the games to query.
 - `numRecommended`: The number of games to recommend matching the criteria.
