@@ -96,8 +96,7 @@ npm start
 
 The frontend server will start on **port 3000** and can be verified with any web browser.
 
-## API endpoints
-
+## API Endpoints
 ### GET /games_by_platform
 **Description**: Returns all games filtered by the platform.
 
