@@ -1,15 +1,15 @@
 #!/bin/bash
 
-backend_pid_file="backlogger.pid"
+BACKEND_PID_FILE="backlogger.pid"
 
 cd backlogger-backend
 
-if [ ! -f "$backend_pid_file" ]; then
+if [ ! -f "$BACKEND_PID_FILE" ]; then
     echo "There is no instance of the backend server running, so nothing will happen."
     exit 1
 fi
 
-backend_pid=$(cat "$backend_pid_file")
+backend_pid=$(cat "$BACKEND_PID_FILE")
 
 echo "Stopping the backend server with PID: $backend_pid..."
 kill "$backend_pid"
@@ -22,4 +22,4 @@ else
 fi
 
 # Deleting the .pid file to indicate that the backend server is no longer running
-rm -rf "$backend_pid_file"
+rm -rf "$BACKEND_PID_FILE"
