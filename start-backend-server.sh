@@ -67,6 +67,14 @@ function create_virtual_environment() {
     echo ""
 }
 
+script_directory=$(dirname $(realpath "$0"))
+current_directory=$(pwd)
+
+if [ "$script_directory" != "$current_directory" ]; then
+    echo "You must be in the script's directory to run it! Aborting..."
+    exit 1
+fi
+
 cd backlogger-backend
 
 # Check to ensure that not more than 1 backend server is running at a time
