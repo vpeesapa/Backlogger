@@ -11,10 +11,17 @@ function GamesContentDialog(props) {
 
     const statusColor = getStatusColor(gameData["status"]);
     const scoreBackgroundColor = getScoreBackgroundColor(gameData["score"]);
+    const titleBackground = gameData["allAchievements"] ? {
+        backgroundColor: 'grey',
+        color: 'white'
+     } : {
+        backgroundColor: 'white',
+        color: 'black'
+     };
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-            <DialogTitle sx={{ fontFamily: 'monospace',fontSize: 20 }}>
+            <DialogTitle sx={{ fontFamily: 'monospace',fontSize: 20,backgroundColor: titleBackground.backgroundColor,color: titleBackground.color }}>
                 <b>{gameData["name"]}</b>
             </DialogTitle>
             <DialogContent dividers>

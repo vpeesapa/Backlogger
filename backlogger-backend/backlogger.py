@@ -76,7 +76,7 @@ logger.addHandler(fileHandler)
 
 # GAME CLASS
 class Game:
-	def __init__(self,name,coverImageLink,platform,developer,year,completionTime,status,genres,score,backloggdScore):
+	def __init__(self,name,coverImageLink,platform,developer,year,completionTime,status,genres,allAchievements,score,backloggdScore):
 		self.name = name
 		self.coverImageLink = coverImageLink
 		self.platform = platform
@@ -99,6 +99,8 @@ class Game:
 		# The game can have many genres, so it's better to have a list again
 		self.genres = AppendToArray(genres)
 
+		self.allAchievements = True if allAchievements == "TRUE" else False
+
 		if score != "-":
 			self.score = float(score)
 		else:
@@ -118,6 +120,7 @@ class Game:
 		print("Completion Time: " + str(self.completionTime))
 		print("Status: " + self.status)
 		print("Genres: " + str(self.genres))
+		print("All Achievements: " + str(self.allAchievements))
 		print("Score: " + str(self.score))
 		print("Backloggd Score: " + str(self.backloggdScore))
 		print()
@@ -132,6 +135,7 @@ class Game:
 			"completionTime": self.completionTime,
 			"status": self.status,
 			"genres": self.genres,
+			"allAchievements": self.allAchievements,
 			"score": self.score,
 			"backloggdScore": self.backloggdScore
 		}
@@ -155,10 +159,11 @@ def AddGameToMasterList(game):
 	completionTime = game[5]
 	status = game[6]
 	genres = game[7]
-	score = game[8]
-	backloggdScore = game[9]
+	allAchievements = game[8]
+	score = game[9]
+	backloggdScore = game[10]
 
-	newGame = Game(name,coverImageLink,platform,developer,year,completionTime,status,genres,score,backloggdScore)
+	newGame = Game(name,coverImageLink,platform,developer,year,completionTime,status,genres,allAchievements,score,backloggdScore)
 
 	GAMES_MASTER_LIST.append(newGame)
 
