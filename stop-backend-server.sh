@@ -2,7 +2,7 @@
 
 BACKEND_PID_FILE="backlogger.pid"
 
-script_directory=$(dirname $(realpath "$0"))
+script_directory=$(dirname "$(realpath "$0")")
 current_directory=$(pwd)
 
 if [ "$script_directory" != "$current_directory" ]; then
