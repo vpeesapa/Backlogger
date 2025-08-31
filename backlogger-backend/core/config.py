@@ -10,5 +10,3 @@ class Config:
     API_KEY = os.getenv("API_KEY")
 
     LOGGING_FILE_NAME = os.getenv("LOGGING_FILE_NAME")
-
-    BACKEND_PORT_NUMBER = os.getenv("BACKEND_PORT_NUMBER")

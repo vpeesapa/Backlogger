@@ -86,8 +86,16 @@ fi
 # Create the virtual environment if it doesn't exist
 create_virtual_environment
 
+# Safely load the .env file
+set -a
+source .env
+set +a
+
+export FLASK_APP=main.py
+export FLASK_ENV=development
+
 # Run the script
-nohup python backlogger.py > "$LOG_FILE" 2>&1 &
+nohup flask run --port="$BACKEND_PORT_NUMBER" > "$LOG_FILE" 2>&1 &
 
 echo $! > "$BACKEND_PID_FILE"
 
