@@ -11,7 +11,7 @@ function GamesContentDialog(props) {
 
     const statusColor = getStatusColor(gameData["status"]);
     const scoreBackgroundColor = getScoreBackgroundColor(gameData["score"]);
-    const titleBackground = gameData["allAchievements"] ? {
+    const titleBackground = gameData["all_achievements"] ? {
         backgroundColor: 'grey',
         color: 'white'
      } : {
@@ -26,14 +26,14 @@ function GamesContentDialog(props) {
             </DialogTitle>
             <DialogContent dividers>
                 <Stack direction={"row"} spacing={2}>
-                    <img alt={gameData["name"]} src={`${gameData["coverImageLink"]}`} style={{ height: 285,width: 225 }} />
+                    <img alt={gameData["name"]} src={`${gameData["cover_image_link"]}`} style={{ height: 285,width: 225 }} />
                     <Box>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Platform</b>: {gameData["platform"]}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Release Date</b>: {gameData["year"]}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18,color: statusColor }}><b>Status</b>: {gameData["status"]}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Developer</b>: {stringifyArrays(gameData["developer"])}</Typography>
                         <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Genres</b>: {stringifyArrays(gameData["genres"])}</Typography>
-                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Completion Time</b>: {gameData["completionTime"]} hours</Typography>
+                        <Typography sx={{ fontFamily: 'monospace',fontSize: 18 }}><b>Completion Time</b>: {gameData["completion_time"]} hours</Typography>
                         <Box display={"flex"} justifyContent={"center"} alignItems={"center"} paddingTop={2}>
                             <Box
                                 sx={{

@@ -50,7 +50,7 @@ function GamesContent(props) {
                                     return (
                                         <ImageListItem key={item["name"]} sx={{ width: 225,height: 285 }}>
                                             <img
-                                                src={`${item["coverImageLink"]}?w=225&h=285&fit=crop`}
+                                                src={`${item["cover_image_link"]}?w=225&h=285&fit=crop`}
                                                 alt={item["name"]}
                                                 loading="lazy"
                                             />
