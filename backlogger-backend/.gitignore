@@ -3,9 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# pyenv-specific files
-.python-version
-
 # C extensions
 *.so
 
