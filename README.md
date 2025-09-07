@@ -190,6 +190,8 @@ curl --location 'localhost:8090/recommend' \
 **HTTP Response Codes**:
 - **200 OK**: Successfully recommends games based on the input criteria.
 - **400 ERROR**: Invalid values given in the input criteria.
+- **403 ERROR**: Missing keys inside the request parameter.
+- **404 ERROR**: No data was passed by the request.
 
 ### GET /games_distribution_per_status
 **Description**: Returns the distribution of games based on their completion status.
@@ -221,7 +223,7 @@ curl --location 'localhost:8090/games_distribution_per_platform'
 - Add CRUD functionalities:
   - Allow users to add new entries that will also be saved in the spreadsheet.
   - Allow users to update existing entries and saved in the spreadsheet.
-- Centralize error handling in the backend.
+- ~~Centralize error handling in the backend.~~
 - Add a proxy server to handle frontend requests without dealing with CORS middleware issues.
 
 ## Credits
