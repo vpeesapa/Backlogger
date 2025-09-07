@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 
 from .routes import api_blueprint
+from .error_handlers import register_error_handlers
 
 from services.sheet_parser import parse_sheet_data
 
@@ -11,6 +12,9 @@ def create_app():
 
     # Register blueprints to link the endpoints to the application
     app.register_blueprint(api_blueprint)
+
+    # Register any error handlers defined
+    register_error_handlers(app)
 
     # Read data from the sheet and cache them
     parse_sheet_data()

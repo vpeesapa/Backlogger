@@ -1,8 +1,11 @@
 from flask import Blueprint,jsonify,request
 
+from core.exceptions import NotFoundError,ValidationError,RequestParamError
 from core.data_cache import DataCache
+from core.logger import logger
 from services.recommend import recommend
 from utils.constants import Constants
+from utils.common_utils import check_key_in_dict
 
 api_blueprint = Blueprint("api",__name__)
 
@@ -23,7 +26,11 @@ def fetch_all_games_by_platform():
 @api_blueprint.route("/games_on_platform/<string:platform>",methods=["GET"])
 def fetch_games_on_platform(platform):
 	if platform not in Constants.VALID_PLATFORMS:
-		return jsonify(f"{platform} is not a valid platform!"),400
+		error_message = f"{platform} is not a valid platform!"
+
+		logger.error(error_message)
+
+		raise ValidationError(error_message)
 
 	games_on_platform = []
 
@@ -50,7 +57,11 @@ def fetch_all_games_by_status():
 @api_blueprint.route("/games_by_status/<string:status>",methods=["GET"])
 def fetch_games_by_status(status):
 	if status not in Constants.VALID_STATUS:
-		return jsonify(f"{status} is not a valid status!"),400
+		error_message = f"{status} is not a valid status!"
+
+		logger.error(error_message)
+
+		raise ValidationError(error_message)
 
 	games_by_status = []
 
@@ -64,21 +75,60 @@ def fetch_games_by_status(status):
 def recommend_games():
 	data = request.get_json()
 
+	error_message = ""
+
 	if not data:
-		return jsonify("Can only recommend if certain data is passed!"),400
+		error_message = "Can only recommend if certain data is passed!"
 
-	if data["status"] not in Constants.VALID_STATUS:
-		return jsonify(f"{data['status']} is not a valid status!"),400
+		logger.error(error_message)
 
-	if data["platform"] not in Constants.VALID_PLATFORMS:
-		return jsonify(f"{data['platform']} is not a valid platform!"),400
+		raise NotFoundError(error_message)
+	
+	if not check_key_in_dict(data,Constants.STATUS):
+		error_message = f"'{Constants.STATUS}' needs to be present in the request parameter!"
 
-	if type(data["numRecommended"]) is not int or data["numRecommended"] <= 0:
-		return jsonify("The number of recommended games can only be a positive integer"),400
+		logger.error(error_message)
 
-	valid_status = Constants.VALID_STATUS[data["status"]]
-	valid_platform = Constants.VALID_PLATFORMS[data["platform"]]
-	num_recommended = data["numRecommended"]
+		raise RequestParamError(error_message)
+	
+	if not check_key_in_dict(data,Constants.PLATFORM):
+		error_message = f"'{Constants.PLATFORM}' needs to be present in the request parameter!"
+
+		logger.error(error_message)
+
+		raise RequestParamError(error_message)
+	
+	if not check_key_in_dict(data,Constants.NUM_RECOMMENDED):
+		error_message = f"'{Constants.NUM_RECOMMENDED}' needs to be present in the request parameter!"
+
+		logger.error(error_message)
+
+		raise RequestParamError(error_message)
+
+	if data[Constants.STATUS] not in Constants.VALID_STATUS:
+		error_message = f"{data[Constants.STATUS]} is not a valid status!"
+
+		logger.error(error_message)
+
+		raise ValidationError(error_message)
+
+	if data[Constants.PLATFORM] not in Constants.VALID_PLATFORMS:
+		error_message = f"{data[Constants.PLATFORM]} is not a valid platform!"
+
+		logger.error(error_message)
+
+		raise ValidationError(error_message)
+
+	if type(data[Constants.NUM_RECOMMENDED]) is not int or data[Constants.NUM_RECOMMENDED] <= 0:
+		error_message = "The number of recommended games can only be a positive integer"
+
+		logger.error(error_message)
+
+		raise ValidationError(error_message)
+
+	valid_status = Constants.VALID_STATUS[data[Constants.STATUS]]
+	valid_platform = Constants.VALID_PLATFORMS[data[Constants.PLATFORM]]
+	num_recommended = data[Constants.NUM_RECOMMENDED]
 
 	recommended_games = recommend(valid_platform,valid_status,num_recommended)
 

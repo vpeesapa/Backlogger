@@ -1,6 +1,7 @@
 import requests
 
 from core.config import Config
+from core.exceptions import NotFoundError
 from core.logger import logger
 from core.data_cache import DataCache
 
@@ -20,17 +21,14 @@ def get_sheet_data():
         return response.json()
     except requests.exceptions.RequestException as e:
         # Handle errors that occur while processing the request
-        logger.error(f"An error occured: {e}")
+        error_message = f"An error occured: {e}"
 
-        return None
+        logger.error(error_message)
+
+        raise NotFoundError(error_message)
 
 def parse_sheet_data():
     sheet_data = get_sheet_data()
-
-    if not sheet_data:
-        logger.error("Failed to fetch data from the Google Sheets API")
-
-        return
 
     # Save the headers
     data_headers = sheet_data["values"][0]

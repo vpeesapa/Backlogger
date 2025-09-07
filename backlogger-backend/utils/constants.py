@@ -22,3 +22,8 @@ class Constants:
         "nintendo_ds": Platform.NINTENDO_DS.value,
         "nintendo_3ds": Platform.NINTENDO_3DS.value
     }
+
+    # Request keys for the recommendation API
+    STATUS = "status"
+    PLATFORM = "platform"
+    NUM_RECOMMENDED = "numRecommended"
