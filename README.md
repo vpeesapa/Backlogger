@@ -39,7 +39,7 @@ To access the backend from the terminal (or Git BASH), run the following command
 cd backlogger-backend
 ```
 
-Backlogger was tested on [Python 3.13.5](https://www.python.org/downloads/release/python-3135/) on Windows, but the basic installation and setup should be applicable to Linux and MacOs as well. If installing Python on Windows, ensure that it is also added to the system variables ([steps here](https://www.digitalocean.com/community/tutorials/install-python-windows-10)).
+Backlogger was tested on [Python 3.13.5](https://www.python.org/downloads/release/python-3135/) on Windows, but the basic installation and setup should be applicable to Linux and MacOS as well. If installing Python on Windows, ensure that it is also added to the system variables ([steps here](https://www.digitalocean.com/community/tutorials/install-python-windows-10)).
 
 If you're trying to manage multiple versions of Python, I highly recommend [`pyenv`](https://github.com/pyenv/pyenv) (or [`pyenv-win`](https://github.com/pyenv-win/pyenv-win) for Windows) for seamless management of Python versions between projects.
 
@@ -71,8 +71,27 @@ To start the backend application, run this command:
 ```bash
 python backlogger.py
 ```
+___
+**Update**: As of 30th August 2025, with the backend now broken into smaller, modular scripts, simply running `python backlogger.py` won't work as expected. Instead, run the following the following script to seamlessly start the backend server in the background:
+```bash
+./start-backend-server.sh
+```
 
 With this, the backend application would be running on **port 8089**, which you can either verify through [Postman](https://www.postman.com/) or a web browser of your choice using the endpoints mentioned in the following section.
+
+The following script will stop the backend server, if running:
+```bash
+./stop-backend-server.sh
+```
+
+**Note**: `start-backend-server.sh` and `stop-backend-server.sh` will only run from the `Backlogger` directory.
+
+In case some debugging has to be done and the runner script (i.e. `backlogger.py`) has to be run, add the following snippet to it:
+```Python
+if __name__ == "__main__":
+    app.run(debug=True,port=8089)
+```
+___
 
 ### Frontend Setup and Installation
 Similarly, the frontend is accessible from the terminal (or Git BASH) with the following command:
@@ -196,13 +215,14 @@ curl --location 'localhost:8090/games_distribution_per_platform'
 
 ## Future Improvements
 - Improve frontend styling to be more responsive on different displays.
-- Modularize backend logic into smaller scripts in compliance with modern standards.
-- Create a start up script to automatically run the backend server.
-  - Extend the script's functionality so that the initial setup can also be done through this script.
+- ~~Modularize backend logic into smaller scripts in compliance with modern standards.~~
+- ~~Create a start up script to automatically run the backend server.~~
+  - ~~Extend the script's functionality so that the initial setup can also be done through this script.~~
 - Add CRUD functionalities:
   - Allow users to add new entries that will also be saved in the spreadsheet.
   - Allow users to update existing entries and saved in the spreadsheet.
 - Centralize error handling in the backend.
+- Add a proxy server to handle frontend requests without dealing with CORS middleware issues.
 
 ## Credits
 All images for the games displayed were taken from [backloggd.com](https://backloggd.com/). Similarly, completion times were taken from [howlongtobeat.com](https://howlongtobeat.com/).
