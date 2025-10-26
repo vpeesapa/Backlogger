@@ -25,6 +25,7 @@ class DataCache:
         backloggd_score = game[10]
 
         new_game = Game(name,cover_image_link,platform,developer,year,completion_time,status,genres,all_achievements,score,backloggd_score)
+        new_game.assign_id(len(cls.GAMES_MASTER_LIST) + 1)
 
         cls.GAMES_MASTER_LIST.append(new_game)
     

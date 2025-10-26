@@ -2,6 +2,8 @@ from utils.common_utils import append_to_array
 
 class Game:
 	def __init__(self,name,cover_image_link,platform,developer,year,completion_time,status,genres,all_achievements,score,backloggd_score):
+		self.id = -1
+
 		self.name = name
 		self.cover_image_link = cover_image_link
 		self.platform = platform
@@ -35,6 +37,10 @@ class Game:
 			self.backloggd_score = float(backloggd_score)
 		else:
 			self.backloggd_score = backloggd_score
+	
+	def assign_id(self,id):
+		if self.id == -1:
+			self.id = id
 	
 	def convert_to_row(self):
 		return [
