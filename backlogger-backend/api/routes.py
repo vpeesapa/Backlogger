@@ -3,9 +3,12 @@ from flask import Blueprint,jsonify,request
 from core.exceptions import NotFoundError,ValidationError,RequestParamError
 from core.data_cache import DataCache
 from core.logger import logger
+from models.game import Game
 from services.recommend import recommend
+from services.sheet_parser import insert_game_to_sheet
 from utils.constants import Constants
 from utils.common_utils import check_key_in_dict
+from utils.enrichers.append_request_enricher import enrich_append_request
 
 api_blueprint = Blueprint("api",__name__)
 
@@ -156,3 +159,28 @@ def fetch_games_distribution_per_platform():
 		games_per_platform[key] = len(DataCache.GAMES_BY_PLATFORM[key])
 
 	return jsonify(games_per_platform),200
+
+@api_blueprint.route("/add_game",methods=["POST"])
+def insert_new_game():
+	data = request.get_json()
+	
+	# Validate the input request
+	enriched_data = enrich_append_request(data)
+
+	name = enriched_data["name"]
+	cover_image_link = enriched_data["cover_image_link"]
+	platform = enriched_data["platform"]
+	developer = "; ".join(enriched_data["developer"])
+	year = enriched_data["year"]
+	completion_time = enriched_data["completion_time"]
+	status = enriched_data["status"]
+	genres = "; ".join(enriched_data["genres"])
+	all_achievements = enriched_data["all_achievements"]
+	score = enriched_data["score"]
+	backloggd_score = enriched_data["backloggd_score"]
+
+	new_game = Game(name,cover_image_link,platform,developer,year,completion_time,status,genres,all_achievements,score,backloggd_score)
+
+	insert_game_to_sheet(new_game)
+
+	return jsonify({"message": "Successfully inserted"}),200

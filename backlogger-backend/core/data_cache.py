@@ -11,7 +11,7 @@ class DataCache:
     GAMES_BY_PLATFORM = {}
 
     @classmethod
-    def add_game_to_master_list(cls,game: Game):
+    def add_game_to_master_list(cls,game):
         name = game[0]
         cover_image_link = game[1]
         platform = game[2]
@@ -52,3 +52,8 @@ class DataCache:
             cls.differentiate_games_by_status(games_info)
 
             cls.differentiate_games_by_platform(games_info)
+    
+    @classmethod
+    def clear_lists(cls):
+        cls.GAMES_BY_STATUS.clear()
+        cls.GAMES_BY_PLATFORM.clear()

@@ -35,6 +35,21 @@ class Game:
 			self.backloggd_score = float(backloggd_score)
 		else:
 			self.backloggd_score = backloggd_score
+	
+	def convert_to_row(self):
+		return [
+			self.name,
+			self.cover_image_link,
+			self.platform,
+			"; ".join(self.developer),
+			self.year,
+			self.completion_time,
+			self.status,
+			"; ".join(self.genres),
+			"TRUE" if self.all_achievements else "FALSE",
+			self.score,
+			self.backloggd_score
+		]
 
 	def print_game_info(self):
 		print("Name: " + self.name)

@@ -9,5 +9,12 @@ def add_game_to_dict(game_dict,key,games_info):
 	game_dict[key].append(games_info)
 
 def check_key_in_dict(game_dict,key):
-	
 	return key in game_dict
+
+def custom_round(number):
+	decimal_part = number - int(number)
+
+	if decimal_part >= 0.5:
+		return int(number) + 1
+	
+	return int(number)

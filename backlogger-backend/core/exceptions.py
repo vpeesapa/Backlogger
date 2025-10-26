@@ -6,13 +6,17 @@ class CustomError(Exception):
         super().__init__(self.message)
 
 class NotFoundError(CustomError):
-    def __init__(self, message,status_code=404):
+    def __init__(self,message,status_code=404):
         super().__init__(message,status_code)
 
 class ValidationError(CustomError):
-    def __init__(self, message,status_code=400):
+    def __init__(self,message,status_code=400):
         super().__init__(message,status_code)
 
 class RequestParamError(CustomError):
-    def __init__(self, message,status_code=403):
+    def __init__(self,message,status_code=403):
+        super().__init__(message,status_code)
+
+class GameInsertionError(CustomError):
+    def __init__(self,message,status_code=402):
         super().__init__(message,status_code)
