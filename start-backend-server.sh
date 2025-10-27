@@ -97,6 +97,15 @@ export FLASK_ENV=development
 # Run the script
 nohup flask run --port="$BACKEND_PORT_NUMBER" > "$LOG_FILE" 2>&1 &
 
-echo $! > "$BACKEND_PID_FILE"
+pid="$!"
 
-echo "The backend server is running with process ID: $(cat $BACKEND_PID_FILE)"
+echo "Starting the backend server..."
+sleep 10
+
+if ps -p "$pid" > /dev/null; then
+    echo "$pid" > "$BACKEND_PID_FILE"
+
+    echo "The backend server is running with process ID: $pid"
+else
+    echo "Something went wrong when starting the server. Check $LOG_FILE for more details"
+fi
