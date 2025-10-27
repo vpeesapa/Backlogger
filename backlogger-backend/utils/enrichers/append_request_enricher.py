@@ -101,8 +101,6 @@ def validate_append_request(append_request):
     logger.info("The append request has been successfully validated!")
     return True
     
-
-
 def enrich_append_request(append_request):
     if not validate_append_request(append_request):
         raise ValidationError(f"Error validating request: {append_request}")
