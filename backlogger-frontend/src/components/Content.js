@@ -8,6 +8,7 @@ import {
 import GamesContent from './GamesContent';
 import StatsContent from './StatsContent';
 import RecommendationContent from './RecommendationContent';
+import AddGameContent from './AddGameContent';
 import { tabStyles } from '../styles';
 import { platformFilters, statsFilters, statusFilters } from '../Commons';
 import { fetchPlatformDataService, fetchPlatformDistributionDataService, fetchStatusDataService, fetchStatusDistributionDataService } from '../services/ApiService';
@@ -198,6 +199,11 @@ function Content(props) {
                     }
                 </Box>
             </Stack>
+            {
+                displayGames ? (
+                    <AddGameContent />
+                ) : null
+            }
         </Box>
     );
 }
