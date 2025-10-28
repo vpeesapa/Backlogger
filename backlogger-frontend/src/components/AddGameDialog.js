@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import AddGameForm from './AddGameForm';
 
 function AddGameDialog(props) {
     const {
@@ -7,17 +8,13 @@ function AddGameDialog(props) {
         handleClose
     } = props;
 
-    const handlePageRefresh = (event) => {
-        window.location.reload();
-    };
-
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
             <DialogTitle sx={{ fontFamily: 'monospace',fontSize: 20 }}>
                 <b>Add New Game</b>
             </DialogTitle>
             <DialogContent dividers>
-                <Button onClick={handlePageRefresh}>Refresh Page</Button>
+                <AddGameForm />
             </DialogContent>
         </Dialog>
     );
