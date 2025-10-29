@@ -95,7 +95,7 @@ export FLASK_APP=backlogger.py
 export FLASK_ENV=development
 
 # Run the script
-nohup flask run --port="$BACKEND_PORT_NUMBER" > "$LOG_FILE" 2>&1 &
+nohup flask run --debug --port="$BACKEND_PORT_NUMBER" > "$LOG_FILE" 2>&1 &
 
 pid="$!"
 
