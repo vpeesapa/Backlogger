@@ -14,7 +14,7 @@ function AddGameDialog(props) {
                 <b>Add New Game</b>
             </DialogTitle>
             <DialogContent dividers>
-                <AddGameForm />
+                <AddGameForm handleClose={handleClose} />
             </DialogContent>
         </Dialog>
     );

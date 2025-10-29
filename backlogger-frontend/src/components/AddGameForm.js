@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { Box, Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
-import { platformFilters, statusFilters, } from '../Commons';
+import { platformFilters, platformMapper, statusFilters, statusMapper, } from '../Commons';
+import { fetchAddGameService } from '../services/ApiService';
 
 function AddGameForm(props) {
+    const {
+        handleClose
+    } = props;
+
     const [payload,setPayload] = React.useState({
         name: "",
         cover_image_link: "",
@@ -18,6 +23,34 @@ function AddGameForm(props) {
 
     const [developerValue,setDeveloperValue] = React.useState("");
     const [genreValue,setGenreValue] = React.useState("");
+
+    const disableSubmitButton = () => {
+        if(payload.name === "") {
+            return true;
+        }
+
+        if(payload.cover_image_link === "") {
+            return true;
+        }
+
+        if(payload.platform === "") {
+            return true;
+        }
+
+        if(payload.developer.length === 0) {
+            return true;
+        }
+
+        if(payload.status === "") {
+            return true;
+        }
+
+        if(payload.genres.length === 0) {
+            return true;
+        }
+
+        return false;
+    };
 
     const handleTextFieldChange = (event,textFieldType) => {
         switch(textFieldType) {
@@ -164,8 +197,86 @@ function AddGameForm(props) {
         });
     };
 
-    const handlePageRefresh = (event) => {
-        window.location.reload();
+    const validatePayload = () => {
+        if(!payload.cover_image_link.startsWith("https://")) {
+            alert("The link to the cover image should be a valid URL");
+            return false;
+        }
+
+        if(payload.year !== "") {
+            if(!Number(payload.year)) {
+                alert("The year of the game's release should be a number if it's not empty");
+                return false;
+            }
+            if(Number(payload.year) < 0) {
+                alert("The year of the game's release cannot be a negative number if it's not empty");
+                return false;
+            }
+            if(Number(payload.year) % 1 !== 0) {
+                alert("The year of the game's release should be whole number if it's not empty");
+                return false;
+            }
+        }
+
+        if(payload.completion_time !== "") {
+            if(!Number(payload.completion_time)) {
+                alert("The time taken to complete the game should be a number if it's not empty");
+                return false;
+            }
+            if(Number(payload.completion_time) < 0) {
+                alert("The time taken to complete the game should not be a negative number if it's not empty");
+                return false;
+            }
+        }
+
+        if(payload.score !== "") {
+            if(!Number(payload.score)) {
+                alert("The game's score should be a number if it's not empty");
+                return false;
+            }
+            if(Number(payload.score) < 0 || Number(payload.score) > 10) {
+                alert("The game's score should be a number between 0 and 10");
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    const handleFormSubmit = (event) => {
+        if(!validatePayload()) {
+            return;
+        }
+
+        // Enrich the payload so that the values remain consistent with that in the backend
+        const enrichedPayload = JSON.parse(JSON.stringify(payload));
+
+        enrichedPayload.platform = platformMapper[payload.platform];
+        enrichedPayload.status = statusMapper[payload.status];
+
+        if(payload.year === "") {
+            enrichedPayload.year = "-";
+        }
+
+        if(payload.completion_time === "") {
+            enrichedPayload.completion_time = "-";
+        }
+
+        if(payload.score === "") {
+            enrichedPayload.score = "-";
+        }
+
+        fetchAddGameService(enrichedPayload)
+            .then(responseData => {
+                console.log(responseData);
+            }).catch(e => {
+                console.error(e);
+            }).finally(() => {
+                handleClose(event);
+
+                // Reload the page to fetch everything including the new game
+                window.location.reload();
+            });
     };
 
     return (
@@ -232,14 +343,12 @@ function AddGameForm(props) {
             </Stack>
             <Stack direction={'row'} fullWidth spacing={1}>
                 <TextField
-                    required
                     fullWidth
                     label="Year"
                     value={payload.year}
                     onChange={(event) => handleTextFieldChange(event,"year")}
                 />
                 <TextField
-                    required
                     fullWidth
                     label="Completion Time"
                     value={payload.completion_time}
@@ -307,7 +416,14 @@ function AddGameForm(props) {
                     </Stack>
                 ) : null
             }
-            <Button variant="contained" color="success" onClick={handlePageRefresh}>Add Game</Button>
+            <Button
+                variant="contained"
+                color="success"
+                disabled={disableSubmitButton()}
+                onClick={handleFormSubmit}
+            >
+                Add Game
+            </Button>
         </Stack>
     );
 }
