@@ -94,7 +94,7 @@ def validate_append_request(append_request):
     if str(append_request["score"]) == "":
         logger.error("The score cannot be an empty string")
         return False
-    if str(append_request["score"]) != "-" and (int(append_request["score"]) > 10 or int(append_request["score"]) < 0):
+    if str(append_request["score"]) != "-" and (float(append_request["score"]) > 10 or float(append_request["score"]) < 0):
         logger.error("The score should be between 0 and 10")
         return False
 
