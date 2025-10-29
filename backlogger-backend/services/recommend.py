@@ -15,10 +15,7 @@ def recommend(platform: str,status: str,num_recommended: int) -> List[Game]:
     return recommend_games(eligibleGames,num_recommended)
 
 def recommend_games(list_of_games: List[Game],num_recommended: int) -> List[Game]:
-    recommended_games = []
-
-    # Keep track of the number of games that have already been recommended
-    current_num_recommended_games = 0
+    recommended_games = set()
 
     total_recommended_games = 0
 
@@ -33,14 +30,9 @@ def recommend_games(list_of_games: List[Game],num_recommended: int) -> List[Game
     
     logger.info(f"Recommending {total_recommended_games} out of a total of {len(filtered_list)} games!")
 
-    while current_num_recommended_games < total_recommended_games:
-        # Select a random game from the list of backlog games
+    while len(recommended_games) < total_recommended_games:
+        # Select a random game from the list of backlog games and add it to the set
         recommended_game = random.choice(filtered_list)
+        recommended_games.add(recommended_game)
 
-        if recommended_game not in recommended_games:
-            recommended_games.append(recommended_game)
-
-            # Only iterate when a unique game has been recommended
-            current_num_recommended_games += 1
-    
-    return recommended_games
+    return list(recommended_games)
