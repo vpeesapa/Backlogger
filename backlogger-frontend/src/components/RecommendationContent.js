@@ -2,6 +2,8 @@ import * as React from "react";
 import {
     Box,
     Button,
+    FormControl,
+    InputLabel,
     MenuItem,
     Select,
     Stack,
@@ -95,45 +97,50 @@ function RecommendationContent(props) {
             {
                 displayForm ? (
                     <Stack direction={"row"} spacing={2} sx={{ width: '100%',justifyContent: 'center' }}>
-                        <Select
-                            label="Status"
-                            value={selectedStatus}
-                            onChange={handleStatusChange}
-                            sx={{ width: '20%' }}
-                        >
-                            {
-                                statusFilters.map((status,index) => {
-                                    return (
-                                        <MenuItem
-                                            key={index}
-                                            value={status}
-                                        >
-                                            {status}
-                                        </MenuItem>
-                                    );
-                                })
-                            }
-                        </Select>
-                        <Select
-                            label="Platform"
-                            value={selectedPlatform}
-                            onChange={handlePlatformChange}
-                            sx={{ width: '20%' }}
-                        >
-                            {
-                                platformFilters.map((platform,index) => {
-                                    return (
-                                        <MenuItem
-                                            key={index}
-                                            value={platform}
-                                        >
-                                            {platform}
-                                        </MenuItem>
-                                    );
-                                })
-                            }
-                        </Select>
+                        <FormControl sx={{ width: '20%' }}>
+                            <InputLabel>Status</InputLabel>
+                            <Select
+                                label="Status"
+                                value={selectedStatus}
+                                onChange={handleStatusChange}
+                            >
+                                {
+                                    statusFilters.map((status,index) => {
+                                        return (
+                                            <MenuItem
+                                                key={index}
+                                                value={status}
+                                            >
+                                                {status}
+                                            </MenuItem>
+                                        );
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ width: '20%' }}>
+                            <InputLabel>Platform</InputLabel>
+                            <Select
+                                label="Platform"
+                                value={selectedPlatform}
+                                onChange={handlePlatformChange}
+                            >
+                                {
+                                    platformFilters.map((platform,index) => {
+                                        return (
+                                            <MenuItem
+                                                key={index}
+                                                value={platform}
+                                            >
+                                                {platform}
+                                            </MenuItem>
+                                        );
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
                         <TextField
+                            label="Num Recommended"
                             value={selectedNumber}
                             onChange={handleNumberChange}
                             onKeyDown={preventTyping}
