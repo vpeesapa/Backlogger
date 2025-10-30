@@ -31,3 +31,9 @@ def add_to_sheet(new_data):
     except Exception as e:
         logger.error(f"An error occured: {e}")
         raise GameInsertionError(f"Insertion of row {new_data} failed!")
+
+def edit_row(row_number,updated_data):
+    range_str = f"A{row_number}:{chr(75)}{row_number}"
+    logger.info(updated_data)
+
+    sheet.update(updated_data,range_str)
