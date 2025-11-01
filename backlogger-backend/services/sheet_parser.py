@@ -1,6 +1,3 @@
-import requests
-
-from core.config import Config
 from core.exceptions import GameInsertionError
 from core.logger import logger
 from core.data_cache import DataCache
