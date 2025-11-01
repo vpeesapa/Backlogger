@@ -189,22 +189,23 @@ def insert_new_game():
 def edit_game(id):
 	updated_game_data = request.get_json()
 
-	# TODO: Validate the input request
+	# Validate the input request
+	enriched_data = enrich_append_request(updated_game_data)
 
-	name = updated_game_data["name"]
-	cover_image_link = updated_game_data["cover_image_link"]
-	platform = updated_game_data["platform"]
-	developer = "; ".join(updated_game_data["developer"])
-	year = updated_game_data["year"]
-	completion_time = updated_game_data["completion_time"]
-	status = updated_game_data["status"]
-	genres = "; ".join(updated_game_data["genres"])
-	all_achievements = updated_game_data["all_achievements"]
-	score = updated_game_data["score"]
-	backloggd_score = updated_game_data["backloggd_score"]
+	name = enriched_data["name"]
+	cover_image_link = enriched_data["cover_image_link"]
+	platform = enriched_data["platform"]
+	developer = "; ".join(enriched_data["developer"])
+	year = enriched_data["year"]
+	completion_time = enriched_data["completion_time"]
+	status = enriched_data["status"]
+	genres = "; ".join(enriched_data["genres"])
+	all_achievements = enriched_data["all_achievements"]
+	score = enriched_data["score"]
+	backloggd_score = enriched_data["backloggd_score"]
 
 	updated_game_info = Game(name,cover_image_link,platform,developer,year,completion_time,status,genres,all_achievements,score,backloggd_score)
 
-	edit_game_info(id + 1,updated_game_info)
+	edit_game_info(id,updated_game_info)
 
 	return jsonify({"message": "Successfully edited the game information"}),200

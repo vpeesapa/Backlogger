@@ -24,3 +24,7 @@ class GameInsertionError(CustomError):
 class GameEditError(CustomError):
     def __init__(self,message,status_code=405):
         super().__init__(message,status_code)
+
+class InvalidRowError(CustomError):
+    def __init__(self,message,status_code=406):
+        super().__init__(message,status_code)

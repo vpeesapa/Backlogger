@@ -25,9 +25,28 @@ class DataCache:
         backloggd_score = game[10]
 
         new_game = Game(name,cover_image_link,platform,developer,year,completion_time,status,genres,all_achievements,score,backloggd_score)
-        new_game.assign_id(len(cls.GAMES_MASTER_LIST) + 1)
+        new_game.assign_id(cls.fetch_total_games() + 1)
 
         cls.GAMES_MASTER_LIST.append(new_game)
+    
+    @classmethod
+    def modify_master_list(cls,id,game):
+        name = game[0]
+        cover_image_link = game[1]
+        platform = game[2]
+        developer = game[3]
+        year = game[4]
+        completion_time = game[5]
+        status = game[6]
+        genres = game[7]
+        all_achievements = game[8]
+        score = game[9]
+        backloggd_score = game[10]
+
+        updated_game = Game(name,cover_image_link,platform,developer,year,completion_time,status,genres,all_achievements,score,backloggd_score)
+        updated_game.assign_id(id)
+
+        cls.GAMES_MASTER_LIST[id - 1] = updated_game
     
     @classmethod
     def differentiate_games_by_status(cls,games_info: Game):
@@ -58,3 +77,7 @@ class DataCache:
     def clear_lists(cls):
         cls.GAMES_BY_STATUS.clear()
         cls.GAMES_BY_PLATFORM.clear()
+    
+    @classmethod
+    def fetch_total_games(cls):
+        return len(cls.GAMES_MASTER_LIST)

@@ -1,15 +1,26 @@
-from core.exceptions import GameInsertionError
+from core.exceptions import GameInsertionError,GameEditError
 from core.logger import logger
 from core.data_cache import DataCache
 from models.game import Game
 from utils.sheet_utils import get_sheet_data,add_to_sheet,edit_row
 
-def edit_game_info(row_number,updated_game_info: Game):
-    updated_game_row = updated_game_info.convert_to_row()
+def edit_game_info(id,updated_game_info: Game):
+    try:
+        updated_game_row = updated_game_info.convert_to_row()
 
-    edit_row(row_number,[updated_game_row])
+        # Update the row in the spreadsheet with the updated data
+        edit_row(id + 1,[updated_game_row])
 
-    # TODO: Update the data cache so that the data is updated
+        # Update the data cache
+        DataCache.clear_lists()
+        DataCache.modify_master_list(id,updated_game_row)
+        DataCache.populate_lists()
+
+        logger.info("The data cache has been successfully updated with the new data")
+    except Exception as e:
+        error_message = f"An error occurred: {e}"
+        logger.error(error_message)
+        raise GameEditError(error_message)
 
 def insert_game_to_sheet(new_game: Game):
     try:
@@ -26,10 +37,8 @@ def insert_game_to_sheet(new_game: Game):
         logger.info("The data cache has successfully been populated with the new data")
     except Exception as e:
         # Handles errors that occur while processing the request
-        error_message = f"An error occured: {e}"
-
+        error_message = f"An error occurred: {e}"
         logger.error(error_message)
-
         raise GameInsertionError(error_message)
 
 def parse_sheet_data():
