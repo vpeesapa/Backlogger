@@ -165,7 +165,7 @@ function RecommendationContent(props) {
                     </Stack>
                 ) : (
                     <Box sx={{ width: '100%' }}>
-                        <GamesContent displayData={recommendationData} />
+                        <GamesContent displayData={recommendationData} isRecommending />
                         <Stack direction={"row"} spacing={2} sx={{ width: '100%',justifyContent: 'center' }}>
                             <Button
                                 variant="contained"

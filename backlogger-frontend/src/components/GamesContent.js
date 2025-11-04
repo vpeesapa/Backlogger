@@ -3,19 +3,30 @@ import {
     Box,
     IconButton,
     ImageListItem,
-    ImageListItemBar
+    ImageListItemBar,
+    Menu,
+    MenuItem
 } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import GamesContentDialog from "./GamesContentDialog";
 import { stringifyArrays } from "../Commons";
 
 function GamesContent(props) {
     const {
-        displayData
+        displayData,
+        isRecommending = false
     } = props;
 
     const [open,setOpen] = React.useState(false);
     const [gameData,setGameData] = React.useState({});
+
+    const [hoverRowIndex,setHoverRowIndex] = React.useState(-1);
+    const [hoverColIndex,setHoverColIndex] = React.useState(-1);
+
+    const [anchorEl,setAnchorEl] = React.useState(null);
+
+    const menuOpen = Boolean(anchorEl);
 
     const cols = 6;
     const rows = [];
@@ -33,6 +44,29 @@ function GamesContent(props) {
         setOpen(false);
     };
 
+    const handleMouseEnter = (event,rowIndex,colIndex) => {
+        setHoverRowIndex(rowIndex);
+        setHoverColIndex(colIndex);
+    };
+
+    const handleMouseExit = (event) => {
+        setHoverRowIndex(-1);
+        setHoverColIndex(-1)
+    };
+
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = (event) => {
+        setAnchorEl(null);
+    };
+
+    const handleEditGame = (event,game) => {
+        console.log(game);
+        setAnchorEl(null);
+    };
+
     return (
         <>
             {
@@ -46,9 +80,17 @@ function GamesContent(props) {
                             mb={2}
                         >
                             {
-                                row.map((item) => {
+                                row.map((item,colIndex) => {
                                     return (
-                                        <ImageListItem key={item["name"]} sx={{ width: 225,height: 285 }}>
+                                        <ImageListItem
+                                            key={item["name"]}
+                                            sx={{
+                                                width: 225,
+                                                height: 285 
+                                            }}
+                                            onMouseEnter={(event) => handleMouseEnter(event,rowIndex,colIndex)}
+                                            onMouseLeave={handleMouseExit}
+                                        >
                                             <img
                                                 src={`${item["cover_image_link"]}?w=225&h=285&fit=crop`}
                                                 alt={item["name"]}
@@ -63,6 +105,34 @@ function GamesContent(props) {
                                                     </IconButton>
                                                 }
                                             />
+                                            {
+                                                !isRecommending && hoverRowIndex !== -1 && hoverColIndex !== -1 && hoverRowIndex === rowIndex && hoverColIndex === colIndex ? (
+                                                    <Box>
+                                                        <IconButton
+                                                            onClick={handleMenuOpen}
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                right: '2%',
+                                                                top: '2%',
+                                                                backgroundColor: 'black',
+                                                                '&:hover': {
+                                                                    backgroundColor: 'black'
+                                                                }
+                                                            }}
+                                                        >
+                                                            <MoreVertIcon sx={{ color: 'white' }} />
+                                                        </IconButton>
+                                                        <Menu
+                                                            anchorEl={anchorEl}
+                                                            open={menuOpen}
+                                                            onClose={handleMenuClose}
+                                                        >
+                                                            <MenuItem onClick={(event) => handleEditGame(event,item)}>Edit</MenuItem>
+                                                            <MenuItem disabled onClick={handleMenuClose}>Delete</MenuItem>
+                                                        </Menu>
+                                                    </Box>
+                                                ) : null
+                                            }
                                         </ImageListItem>
                                     );
                                 })
