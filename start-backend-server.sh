@@ -9,19 +9,19 @@ function activate_virtual_environment() {
     case "$OSTYPE" in
         linux-gnu*)
             echo "Running on Linux..."
-            source .venv/bin/activate
+            source "$VENV_FILE"/bin/activate
             ;;
         darwin*)
             echo "Running on MacOS..."
-            source .venv/bin/activate
+            source "$VENV_FILE"/bin/activate
             ;;
         cygwin*)
             echo "Running on Windows (via Cygwin)..."
-            source .venv/Scripts/activate
+            source "$VENV_FILE"/Scripts/activate
             ;;
         msys*)
             echo "Running on Windows (via MINGW/MSYS)..."
-            source .venv/Scripts/activate
+            source "$VENV_FILE"/Scripts/activate
             ;;
         *)
             echo "Unknown OS: $OSTYPE. Aborting..."
