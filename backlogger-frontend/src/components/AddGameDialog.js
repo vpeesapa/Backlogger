@@ -5,16 +5,17 @@ import AddGameForm from './AddGameForm';
 function AddGameDialog(props) {
     const {
         open,
-        handleClose
+        handleClose,
+        gameData = null
     } = props;
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
             <DialogTitle sx={{ fontFamily: 'monospace',fontSize: 20 }}>
-                <b>Add New Game</b>
+                <b>{gameData === null ? "Add New Game" : "Edit Game"}</b>
             </DialogTitle>
             <DialogContent dividers>
-                <AddGameForm handleClose={handleClose} />
+                <AddGameForm handleClose={handleClose} gameData={gameData} />
             </DialogContent>
         </Dialog>
     );

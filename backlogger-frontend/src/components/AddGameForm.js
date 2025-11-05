@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Box, Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { platformFilters, platformMapper, statusFilters, statusMapper, } from '../Commons';
-import { fetchAddGameService } from '../services/ApiService';
+import { fetchAddGameService, fetchEditGameService } from '../services/ApiService';
 
 function AddGameForm(props) {
     const {
-        handleClose
+        handleClose,
+        gameData = null
     } = props;
 
     const [payload,setPayload] = React.useState({
@@ -21,8 +22,31 @@ function AddGameForm(props) {
         score: ""
     });
 
+    const [gameId,setGameId] = React.useState(-1);
+
     const [developerValue,setDeveloperValue] = React.useState("");
     const [genreValue,setGenreValue] = React.useState("");
+
+    React.useEffect(() => {
+        if(gameData === null) {
+            return;
+        }
+
+        setPayload({
+            name: gameData["name"],
+            cover_image_link: gameData["cover_image_link"],
+            platform: gameData["platform"],
+            developer: gameData["developer"],
+            year: gameData["year"] === "-" ? "" : gameData["year"],
+            completion_time: gameData["completion_time"] === "-" ? "" : gameData["completion_time"],
+            status: gameData["status"],
+            genres: gameData["genres"],
+            all_achievements: gameData["all_achievements"],
+            score: gameData["score"] === "-" ? "" : gameData["score"]
+        });
+
+        setGameId(gameData["id"]);
+    },[gameData]);
 
     const disableSubmitButton = () => {
         if(payload.name === "") {
@@ -266,17 +290,30 @@ function AddGameForm(props) {
             enrichedPayload.score = "-";
         }
 
-        fetchAddGameService(enrichedPayload)
-            .then(responseData => {
-                console.log(responseData);
-            }).catch(e => {
-                console.error(e);
-            }).finally(() => {
-                handleClose(event);
+        if(gameId !== -1) {
+            // Need to edit the game's information
+            fetchEditGameService(gameId,enrichedPayload)
+                .then(responseData => {
+                    console.log(responseData);
+                    handleClose(event);
 
-                // Reload the page to fetch everything including the new game
-                window.location.reload();
-            });
+                    window.location.reload();
+                }).catch(e => {
+                    console.error(e);
+                });
+        } else {
+            // The game's information will be added as a new game
+            fetchAddGameService(enrichedPayload)
+                .then(responseData => {
+                    console.log(responseData);
+                    handleClose(event);
+    
+                    // Reload the page to fetch everything including the new game
+                    window.location.reload();
+                }).catch(e => {
+                    console.error(e);
+                });
+        }
     };
 
     return (
@@ -422,7 +459,7 @@ function AddGameForm(props) {
                 disabled={disableSubmitButton()}
                 onClick={handleFormSubmit}
             >
-                Add Game
+                {gameId === -1 ? "Add Game" : "Edit Game"}
             </Button>
         </Stack>
     );

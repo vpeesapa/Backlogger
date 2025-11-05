@@ -30,3 +30,7 @@ export const fetchRecommendationDataService = async (recommendationPayload) => {
 export const fetchAddGameService = async (gameAppendPayload) => {
     return api.post("/add_game",gameAppendPayload).then(response => response.data);
 };
+
+export const fetchEditGameService = async (gameId,gameEditPayload) => {
+    return api.post(`/edit_game/${gameId}`,gameEditPayload).then(response => response.data);
+};

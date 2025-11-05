@@ -9,8 +9,11 @@ import {
 } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import GamesContentDialog from "./GamesContentDialog";
 import { stringifyArrays } from "../Commons";
+import AddGameDialog from "./AddGameDialog";
 
 function GamesContent(props) {
     const {
@@ -19,6 +22,7 @@ function GamesContent(props) {
     } = props;
 
     const [open,setOpen] = React.useState(false);
+    const [editDialogOpen,setEditDialogOpen] = React.useState(false);
     const [gameData,setGameData] = React.useState({});
 
     const [hoverRowIndex,setHoverRowIndex] = React.useState(-1);
@@ -63,9 +67,14 @@ function GamesContent(props) {
     };
 
     const handleEditGame = (event,game) => {
-        console.log(game);
+        setEditDialogOpen(true);
+        setGameData(game);
         setAnchorEl(null);
     };
+
+    const handleEditDialogClose = (event) => {
+        setEditDialogOpen(false);
+    }
 
     return (
         <>
@@ -127,8 +136,8 @@ function GamesContent(props) {
                                                             open={menuOpen}
                                                             onClose={handleMenuClose}
                                                         >
-                                                            <MenuItem onClick={(event) => handleEditGame(event,item)}>Edit</MenuItem>
-                                                            <MenuItem disabled onClick={handleMenuClose}>Delete</MenuItem>
+                                                            <MenuItem onClick={(event) => handleEditGame(event,item)}><EditIcon sx={{ marginRight: 1 }} />Edit</MenuItem>
+                                                            <MenuItem disabled onClick={handleMenuClose}><DeleteIcon sx={{ marginRight: 1 }} />Delete</MenuItem>
                                                         </Menu>
                                                     </Box>
                                                 ) : null
@@ -142,6 +151,7 @@ function GamesContent(props) {
                 })
             }
             <GamesContentDialog open={open} handleClose={handleDialogClose} gameData={gameData} />
+            <AddGameDialog open={editDialogOpen} handleClose={handleEditDialogClose} gameData={gameData} />
         </>
     );
 }
