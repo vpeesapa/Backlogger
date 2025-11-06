@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import GamesContentDialog from "./GamesContentDialog";
 import { stringifyArrays } from "../Commons";
 import AddGameDialog from "./AddGameDialog";
+import DeleteGameDialog from "./DeleteGameDialog";
 
 function GamesContent(props) {
     const {
@@ -23,6 +24,7 @@ function GamesContent(props) {
 
     const [open,setOpen] = React.useState(false);
     const [editDialogOpen,setEditDialogOpen] = React.useState(false);
+    const [deleteDialogOpen,setDeleteDialogOpen] = React.useState(false);
     const [gameData,setGameData] = React.useState({});
 
     const [hoverRowIndex,setHoverRowIndex] = React.useState(-1);
@@ -75,6 +77,16 @@ function GamesContent(props) {
     const handleEditDialogClose = (event) => {
         setEditDialogOpen(false);
     }
+
+    const handleDeleteGame = (event,game) => {
+        setDeleteDialogOpen(true);
+        setGameData(game);
+        setAnchorEl(null);
+    };
+
+    const handleDeleteDialogClose = (event) => {
+        setDeleteDialogOpen(false);
+    };
 
     return (
         <>
@@ -137,7 +149,7 @@ function GamesContent(props) {
                                                             onClose={handleMenuClose}
                                                         >
                                                             <MenuItem onClick={(event) => handleEditGame(event,item)}><EditIcon sx={{ marginRight: 1 }} />Edit</MenuItem>
-                                                            <MenuItem disabled onClick={handleMenuClose}><DeleteIcon sx={{ marginRight: 1 }} />Delete</MenuItem>
+                                                            <MenuItem onClick={(event) => handleDeleteGame(event,item)}><DeleteIcon sx={{ marginRight: 1 }} />Delete</MenuItem>
                                                         </Menu>
                                                     </Box>
                                                 ) : null
@@ -152,6 +164,7 @@ function GamesContent(props) {
             }
             <GamesContentDialog open={open} handleClose={handleDialogClose} gameData={gameData} />
             <AddGameDialog open={editDialogOpen} handleClose={handleEditDialogClose} gameData={gameData} />
+            <DeleteGameDialog open={deleteDialogOpen} handleClose={handleDeleteDialogClose} gameData={gameData} />
         </>
     );
 }

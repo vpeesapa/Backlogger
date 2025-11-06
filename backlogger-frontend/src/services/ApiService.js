@@ -34,3 +34,7 @@ export const fetchAddGameService = async (gameAppendPayload) => {
 export const fetchEditGameService = async (gameId,gameEditPayload) => {
     return api.post(`/edit_game/${gameId}`,gameEditPayload).then(response => response.data);
 };
+
+export const fetchDeleteGameService = async (gameId) => {
+    return api.delete(`/delete_game/${gameId}`).then(response => response.data);
+}
