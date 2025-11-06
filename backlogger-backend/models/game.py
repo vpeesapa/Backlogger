@@ -38,8 +38,8 @@ class Game:
 		else:
 			self.backloggd_score = backloggd_score
 	
-	def assign_id(self,id):
-		if self.id == -1:
+	def assign_id(self,id,is_reindexing = False):
+		if self.id == -1 or is_reindexing:
 			self.id = id
 	
 	def convert_to_row(self):

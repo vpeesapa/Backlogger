@@ -49,6 +49,14 @@ class DataCache:
         cls.GAMES_MASTER_LIST[id - 1] = updated_game
     
     @classmethod
+    def remove_from_master_list(cls,id):
+        cls.GAMES_MASTER_LIST.pop(id - 1)
+
+        # Re-index all the remaining games to match the corresponding row numbers
+        for index,game in enumerate(cls.GAMES_MASTER_LIST):
+            game.assign_id(index + 1,is_reindexing=True)
+    
+    @classmethod
     def differentiate_games_by_status(cls,games_info: Game):
         if not Status.has_value(games_info.status):
             logger.error(f"{games_info.status} is not a valid status for {games_info.name}")

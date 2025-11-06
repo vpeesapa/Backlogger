@@ -1,8 +1,8 @@
-from core.exceptions import GameInsertionError,GameEditError
+from core.exceptions import GameInsertionError,GameEditError,GameDeleteError
 from core.logger import logger
 from core.data_cache import DataCache
 from models.game import Game
-from utils.sheet_utils import get_sheet_data,add_to_sheet,edit_row
+from utils.sheet_utils import get_sheet_data,add_to_sheet,edit_row,delete_row
 
 def edit_game_info(id,updated_game_info: Game):
     try:
@@ -21,6 +21,22 @@ def edit_game_info(id,updated_game_info: Game):
         error_message = f"An error occurred: {e}"
         logger.error(error_message)
         raise GameEditError(error_message)
+
+def delete_game_info(id):
+    try:
+        # Delete the row from the spreadsheet
+        delete_row(id + 1)
+
+        # Update the data cache to parallely remove the game
+        DataCache.clear_lists()
+        DataCache.remove_from_master_list(id)
+        DataCache.populate_lists()
+
+        logger.info("The data cache has been successfully updated after deletion")
+    except Exception as e:
+        error_message = f"An error occurred: {e}"
+        logger.error(error_message)
+        raise GameDeleteError(error_message)
 
 def insert_game_to_sheet(new_game: Game):
     try:

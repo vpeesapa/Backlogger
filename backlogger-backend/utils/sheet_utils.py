@@ -3,7 +3,7 @@ from google.oauth2.service_account import Credentials
 
 from core.config import Config
 from core.logger import logger
-from core.exceptions import NotFoundError,GameInsertionError,GameEditError,InvalidRowError
+from core.exceptions import NotFoundError,GameInsertionError,GameEditError,InvalidRowError,GameDeleteError
 from core.data_cache import DataCache
 
 SCOPES = [
@@ -46,3 +46,14 @@ def edit_row(row_number,updated_data):
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         raise GameEditError(f"Editing row {row_number} failed!")
+
+def delete_row(row_number):
+    try:
+        if row_number <= 0 or row_number > DataCache.fetch_total_games() + 1:
+            raise InvalidRowError(f"Accessing invalid row: {row_number}")
+        
+        sheet.delete_rows(row_number)
+        logger.info(f"Row {row_number} was successfully deleted from the spreadsheet!")
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        raise GameDeleteError(f"Deleting row {row_number} failed!")
