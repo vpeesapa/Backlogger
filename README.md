@@ -10,12 +10,15 @@
   - [Frontend Installation and Setup](#frontend-setup-and-installation)
 - [API Endpoints](#api-endpoints)
   - [GET /games_by_platform](#get-games_by_platform)
-  - [GET /games_on_platform/<platform>](#get-games_on_platform)
+  - [GET /games_on_platform/\<platform\>](#get-games_on_platformplatform)
   - [GET /all_games_by_status](#get-all_games_by_status)
-  - [GET /games_by_status/<status>](#get-games_by_status)
+  - [GET /games_by_status/\<status\>](#get-games_by_statusstatus)
   - [POST /recommend](#post-recommend)
   - [GET /games_distribution_per_status](#get-games_distribution_per_status)
   - [GET /games-distribution_per_platform](#get-games-distribution_per_platform)
+  - [POST /add_game](#post-add_game)
+  - [POST /edit_game/\<id\>](#post-edit_gameid)
+  - [DELETE /delete_game/\<id\>](#delete-delete_gameid)
 - [Future Improvements](#future-improvements)
 - [Credits](#credits)
 
@@ -113,7 +116,21 @@ To start the frontend server, run:
 npm start
 ```
 
-The frontend server will start on **port 3000** and can be verified with any web browser.
+___
+**Update**: As of 10th November 2025, the frontend application can be also easily started in the background by running the following command:
+```bash
+./start-frontend-server.sh
+```
+
+Similarly, to stop the application, run:
+```bash
+./stop-frontend-server.sh
+```
+
+**Note**: These scripts do not install any new packages, so it is important to run `npm install` whenever necessary.
+___
+
+Regardless of the method used, the frontend application will start on **port 3000** and can be verified with any web browser.
 
 ## API Endpoints
 ### GET /games_by_platform
@@ -127,7 +144,7 @@ curl --location 'localhost:8090/games_by_platform'
 **HTTP Response Codes**:
 - **200 OK**: Successfully fetched all games filtered by the platform.
 
-### GET /games_on_platform/<platform>
+### GET /games_on_platform/\<platform\>
 **Description**: Returns the list of games belonging to a particular platform.
 
 **Query Parameters**:
@@ -153,7 +170,7 @@ curl --location 'localhost:8090/all_games_by_status'
 **HTTP Response Codes**:
 - **200 OK**: Successfully fetched all games filtered by their status.
 
-### GET /games_by_status/<status>
+### GET /games_by_status/\<status\>
 **Description**: Returns the list of games with the specified completion status.
 
 **Query Parameters**:
@@ -215,14 +232,122 @@ curl --location 'localhost:8090/games_distribution_per_platform'
 **HTTP Response Codes**:
 - **200 OK**: Successfully fetched the distribution of games based on their platform.
 
+### POST /add_game
+**Description**: Adds a new game to the spreadsheet
+
+**Request Header**:
+- `all_achievements`: Obtained all the achievements in the new game.
+- `completion_time`: Average time taken to beat the new game (based on [howlongtobeat.com]()).
+- `cover_image_link`: Image to be used as the cover in the application (taken from [backloggd.com]()).
+- `developer`: The developers of the new game.
+- `genres`: The genres of the new game.
+- `name`: The name of the new game.
+- `platform`: The platform of the new game.
+- `score`: The score of the new game.
+- `status`: The status of the new game.
+- `year`: The release year of the new game.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/add_game' \
+--header 'Content-Type: application/json' \
+--data '{
+    "all_achievements": false,
+    "completion_time": 12.0,
+    "cover_image_link": "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/co9wy4.jpg",
+    "developer": [
+        "test_dev"
+    ],
+    "genres": [
+        "test_genre"
+    ],
+    "name": "test_game",
+    "platform": "steam",
+    "score": 7.5,
+    "status": "wishlist",
+    "year": 2021
+}'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully added the new game to the spreadsheet.
+- **400 ERROR**: Missing keys inside the request parameter.
+- **402 ERROR**: Failed to add the new game's information inside the spreadsheet.
+
+### POST /edit_game/\<id\>
+**Description**: Edits a game and saves the updated information inside the spreadsheet.
+
+**Query Parameters**:
+- `id`: The ID of the game that should be updated.
+
+**Request Header**:
+- `all_achievements`: Obtained all the achievements in the game.
+- `completion_time`: Average time taken to beat the game (based on [howlongtobeat.com]()).
+- `cover_image_link`: Image to be used as the cover in the application (taken from [backloggd.com]()).
+- `developer`: The developers of the game.
+- `genres`: The genres of the game.
+- `name`: The name of the game.
+- `platform`: The platform of the game.
+- `score`: The score of the game.
+- `status`: The status of the game.
+- `year`: The release year of the game.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/edit_game/202' \
+--header 'Content-Type: application/json' \
+--data '{
+    "all_achievements": false,
+    "completion_time": 11.0,
+    "cover_image_link": "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/co9wy4.jpg",
+    "developer": [
+        "test_dev1",
+        "test_dev2"
+    ],
+    "genres": [
+        "test_genre",
+        "Action"
+    ],
+    "name": "test_game",
+    "platform": "steam",
+    "score": 3,
+    "status": "complete",
+    "year": 2021
+}'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: The game was successfully updated in the spreadsheet.
+- **400 ERROR**: Missing keys inside the request parameter.
+- **405 ERROR**: Failed to update the game's information inside the spreadsheet.
+- **406 ERROR**: Attempted to update an out-of-range row.
+
+### DELETE /delete_game/\<id\>
+**Description**: Deletes a game from the spreadsheet.
+
+**Query Parameters**:
+- `id`: The ID of the game that should be deleted.
+
+**cURL**:
+```cURL
+curl --location --request DELETE 'localhost:8090/delete_game/202'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: The game was successfully deleted from the spreadsheet.
+- **406 ERROR**: Attempted to delete an out-of-range row.
+- **407 ERROR**: Failed to delete the game from the spreadsheet.
+
 ## Future Improvements
 - Improve frontend styling to be more responsive on different displays.
 - ~~Modularize backend logic into smaller scripts in compliance with modern standards.~~
 - ~~Create a start up script to automatically run the backend server.~~
   - ~~Extend the script's functionality so that the initial setup can also be done through this script.~~
-- Add CRUD functionalities:
-  - Allow users to add new entries that will also be saved in the spreadsheet.
-  - Allow users to update existing entries and saved in the spreadsheet.
+- ~~Create a start up script to automatically run the backend server~~.
+- ~~Add CRUD functionalities~~:
+  - ~~Allow users to add new entries that will also be saved in the spreadsheet~~.
+  - ~~Allow users to update existing entries and save those changes in the spreadsheet~~.
+  - ~~Allow users to delete existing entries from the spreadsheet~~
 - ~~Centralize error handling in the backend.~~
 - Add a proxy server to handle frontend requests without dealing with CORS middleware issues.
 
