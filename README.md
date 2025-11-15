@@ -343,7 +343,7 @@ curl --location --request DELETE 'localhost:8090/delete_game/202'
 - ~~Modularize backend logic into smaller scripts in compliance with modern standards.~~
 - ~~Create a start up script to automatically run the backend server.~~
   - ~~Extend the script's functionality so that the initial setup can also be done through this script.~~
-- ~~Create a start up script to automatically run the backend server~~.
+- ~~Create a start up script to automatically run the frontend server~~.
 - ~~Add CRUD functionalities~~:
   - ~~Allow users to add new entries that will also be saved in the spreadsheet~~.
   - ~~Allow users to update existing entries and save those changes in the spreadsheet~~.
