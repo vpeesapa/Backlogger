@@ -11,11 +11,9 @@ import RecommendationContent from './RecommendationContent';
 import AddGameContent from './AddGameContent';
 import { tabStyles } from '../styles';
 import { platformFilters, platformMapper, statsFilters, statusFilters, statusMapper } from '../Commons';
-import { fetchDataByPlatformService, fetchDataByStatusService, fetchPlatformDataService, fetchPlatformDistributionDataService, fetchStatusDataService, fetchStatusDistributionDataService } from '../services/ApiService';
+import { fetchDataByPlatformService, fetchDataByStatusService, fetchPlatformDistributionDataService, fetchStatusDistributionDataService } from '../services/ApiService';
 
 function Content(props) {
-    // const [statusData,setStatusData] = React.useState({});
-    // const [platformData,setPlatformData] = React.useState({});
     const [statsData,setStatsData] = React.useState({
         "Platform": {},
         "Status": {}
@@ -185,7 +183,7 @@ function Content(props) {
                 <Box paddingTop={2} sx={{ width: '100%' }}>
                     {
                         displayGames ? (
-                            <GamesContent displayData={displayData} />
+                            <GamesContent displayData={displayData} handleCurrentPageData={fetchCurrentPageData} />
                         ) : (
                             displayStats ? (
                                 <StatsContent displayData={displayData} />
@@ -198,7 +196,7 @@ function Content(props) {
             </Stack>
             {
                 displayGames ? (
-                    <AddGameContent />
+                    <AddGameContent handleCurrentPageData={fetchCurrentPageData} />
                 ) : null
             }
         </Box>

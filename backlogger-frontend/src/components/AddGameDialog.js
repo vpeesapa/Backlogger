@@ -6,7 +6,8 @@ function AddGameDialog(props) {
     const {
         open,
         handleClose,
-        gameData = null
+        gameData = null,
+        handleCurrentPageData
     } = props;
 
     return (
@@ -15,7 +16,7 @@ function AddGameDialog(props) {
                 <b>{gameData === null ? "Add New Game" : "Edit Game"}</b>
             </DialogTitle>
             <DialogContent dividers>
-                <AddGameForm handleClose={handleClose} gameData={gameData} />
+                <AddGameForm handleClose={handleClose} gameData={gameData} handleCurrentPageData={handleCurrentPageData} />
             </DialogContent>
         </Dialog>
     );

@@ -6,7 +6,8 @@ import { fetchAddGameService, fetchEditGameService } from '../services/ApiServic
 function AddGameForm(props) {
     const {
         handleClose,
-        gameData = null
+        gameData = null,
+        handleCurrentPageData
     } = props;
 
     const [payload,setPayload] = React.useState({
@@ -297,7 +298,7 @@ function AddGameForm(props) {
                     console.log(responseData);
                     handleClose(event);
 
-                    window.location.reload();
+                    handleCurrentPageData();
                 }).catch(e => {
                     console.error(e);
                 });
@@ -308,8 +309,7 @@ function AddGameForm(props) {
                     console.log(responseData);
                     handleClose(event);
     
-                    // Reload the page to fetch everything including the new game
-                    window.location.reload();
+                    handleCurrentPageData();
                 }).catch(e => {
                     console.error(e);
                 });

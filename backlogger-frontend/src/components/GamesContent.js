@@ -19,7 +19,8 @@ import DeleteGameDialog from "./DeleteGameDialog";
 function GamesContent(props) {
     const {
         displayData,
-        isRecommending = false
+        isRecommending = false,
+        handleCurrentPageData
     } = props;
 
     const [open,setOpen] = React.useState(false);
@@ -163,8 +164,8 @@ function GamesContent(props) {
                 })
             }
             <GamesContentDialog open={open} handleClose={handleDialogClose} gameData={gameData} />
-            <AddGameDialog open={editDialogOpen} handleClose={handleEditDialogClose} gameData={gameData} />
-            <DeleteGameDialog open={deleteDialogOpen} handleClose={handleDeleteDialogClose} gameData={gameData} />
+            <AddGameDialog open={editDialogOpen} handleClose={handleEditDialogClose} gameData={gameData} handleCurrentPageData={handleCurrentPageData} />
+            <DeleteGameDialog open={deleteDialogOpen} handleClose={handleDeleteDialogClose} gameData={gameData} handleCurrentPageData={handleCurrentPageData} />
         </>
     );
 }

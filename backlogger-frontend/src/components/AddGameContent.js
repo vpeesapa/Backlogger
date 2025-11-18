@@ -4,6 +4,10 @@ import AddIcon from '@mui/icons-material/Add';
 import AddGameDialog from './AddGameDialog';
 
 function AddGameContent(props) {
+    const {
+        handleCurrentPageData
+    } = props;
+
     const [dialogOpen,setDialogOpen] = React.useState(false);
 
     const handleDialogOpen = (event) => {
@@ -35,7 +39,7 @@ function AddGameContent(props) {
             >
                 <AddIcon sx={{ fontSize: 'inherit',color: 'white' }} />
             </IconButton>
-            <AddGameDialog open={dialogOpen} handleClose={handleDialogClose} />
+            <AddGameDialog open={dialogOpen} handleClose={handleDialogClose} handleCurrentPageData={handleCurrentPageData} />
         </>
     );
 }

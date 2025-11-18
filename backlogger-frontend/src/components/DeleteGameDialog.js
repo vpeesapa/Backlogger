@@ -6,7 +6,8 @@ function DeleteGameDialog(props) {
     const {
         open,
         handleClose,
-        gameData
+        gameData,
+        handleCurrentPageData
     } = props;
 
     const handleDeleteGame = (event) => {
@@ -15,7 +16,7 @@ function DeleteGameDialog(props) {
                 console.log(responseData);
                 handleClose(event);
 
-                window.location.reload();
+                handleCurrentPageData();
             }).catch(e => {
                 console.error(e);
             });
