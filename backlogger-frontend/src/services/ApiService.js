@@ -23,6 +23,14 @@ export const fetchStatusDistributionDataService = async () => {
     return api.get("/games_distribution_per_status").then(response => response.data);
 };
 
+export const fetchDataByPlatformService = async (platform) => {
+    return api.get(`/games_on_platform/${platform}`).then(response => response.data);
+};
+
+export const fetchDataByStatusService = async (status) => {
+    return api.get(`/games_by_status/${status}`).then(response => response.data);
+};
+
 export const fetchRecommendationDataService = async (recommendationPayload) => {
     return api.post("/recommend",recommendationPayload).then(response => response.data);
 };

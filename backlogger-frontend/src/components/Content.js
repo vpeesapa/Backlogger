@@ -10,12 +10,12 @@ import StatsContent from './StatsContent';
 import RecommendationContent from './RecommendationContent';
 import AddGameContent from './AddGameContent';
 import { tabStyles } from '../styles';
-import { platformFilters, statsFilters, statusFilters } from '../Commons';
-import { fetchPlatformDataService, fetchPlatformDistributionDataService, fetchStatusDataService, fetchStatusDistributionDataService } from '../services/ApiService';
+import { platformFilters, platformMapper, statsFilters, statusFilters, statusMapper } from '../Commons';
+import { fetchDataByPlatformService, fetchDataByStatusService, fetchPlatformDataService, fetchPlatformDistributionDataService, fetchStatusDataService, fetchStatusDistributionDataService } from '../services/ApiService';
 
 function Content(props) {
-    const [statusData,setStatusData] = React.useState({});
-    const [platformData,setPlatformData] = React.useState({});
+    // const [statusData,setStatusData] = React.useState({});
+    // const [platformData,setPlatformData] = React.useState({});
     const [statsData,setStatsData] = React.useState({
         "Platform": {},
         "Status": {}
@@ -31,29 +31,30 @@ function Content(props) {
     const [displayFilters,setDisplayFilters] = React.useState(true);
 
     React.useEffect(() => {
-        fetchPlatformData();
-        fetchStatusData();
+        fetchCurrentPageData();
         fetchPlatformDistributionData();
         fetchStatusDistributionData();
     },[]);
 
-    const fetchPlatformData = () => {
-        fetchPlatformDataService()
-            .then(responseData => {
-                setPlatformData(responseData);
-                setDisplayData(responseData[platformFilters[0]]);
-            }).catch(e => {
-                console.error(e);
-            });
-    };
-
-    const fetchStatusData = () => {
-        fetchStatusDataService()
-            .then(responseData => {
-                setStatusData(responseData);
-            }).catch(e => {
-                console.error(e);
-            });
+    const fetchCurrentPageData = (type=selectedType,option=selectedOption) => {
+        setSelectedType(type);
+        setSelectedOption(option);
+        
+        if(type === "Platform") {
+            fetchDataByPlatformService(platformMapper[option])
+                .then(responseData => {
+                    setDisplayData(responseData);
+                }).catch(e => {
+                    console.error(e);
+                });
+        } else if(type === "Status") {
+            fetchDataByStatusService(statusMapper[option])
+                .then(responseData => {
+                    setDisplayData(responseData);
+                }).catch(e => {
+                    console.error(e);
+                });
+        }
     };
 
     const fetchPlatformDistributionData = () => {
@@ -91,18 +92,14 @@ function Content(props) {
             setDisplayGames(true);
             setDisplayStats(false);
             setDisplayFilters(true);
-            setSelectedType("Platform");
             setCurrentFilters(platformFilters);
-            setSelectedOption(platformFilters[0]);
-            setDisplayData(platformData[platformFilters[0]]);
+            fetchCurrentPageData("Platform",platformFilters[0]);
         } else if(newValue === "Status") {
             setDisplayGames(true);
             setDisplayStats(false);
             setDisplayFilters(true);
-            setSelectedType("Status");
             setCurrentFilters(statusFilters);
-            setSelectedOption(statusFilters[0]);
-            setDisplayData(statusData[statusFilters[0]]);
+            fetchCurrentPageData("Status",statusFilters[0]);
         } else if(newValue === "Stats") {
             setDisplayGames(false);
             setDisplayStats(true);
@@ -128,9 +125,9 @@ function Content(props) {
         setSelectedOption(newValue);
 
         if(selectedType === "Platform") {
-            setDisplayData(platformData[newValue]);
+            fetchCurrentPageData("Platform",newValue);
         } else if(selectedType === "Status") {
-            setDisplayData(statusData[newValue]);
+            fetchCurrentPageData("Status",newValue);
         } else if(selectedType === "Stats") {
             setDisplayData(statsData[newValue]);
         }
