@@ -340,6 +340,8 @@ curl --location --request DELETE 'localhost:8090/delete_game/202'
 
 ## Future Improvements
 - Improve frontend styling to be more responsive on different displays.
+- ~~Frontend should only fetch games from the selected category instead of all of them when the application loads for the first time.~~
+- ~~When adding, editing, or deleting a game, the frontend should refresh the data displaying in the selected category instead of reloading the page.~~
 - ~~Modularize backend logic into smaller scripts in compliance with modern standards.~~
 - ~~Create a start up script to automatically run the backend server.~~
   - ~~Extend the script's functionality so that the initial setup can also be done through this script.~~
