@@ -26,7 +26,7 @@ class Game:
 		# The game can have many genres, so it's better to have a list again
 		self.genres = append_to_array(genres)
 
-		self.all_achievements = True if all_achievements == "TRUE" else False
+		self.all_achievements = all_achievements
 
 		if score != "-":
 			self.score = float(score)
@@ -52,7 +52,7 @@ class Game:
 			self.completion_time,
 			self.status,
 			"; ".join(self.genres),
-			"TRUE" if self.all_achievements else "FALSE",
+			self.all_achievements,
 			self.score,
 			self.backloggd_score
 		]
