@@ -26,7 +26,7 @@ class Game:
 		# The game can have many genres, so it's better to have a list again
 		self.genres = append_to_array(genres)
 
-		self.all_achievements = all_achievements
+		self.all_achievements = True if all_achievements == True or all_achievements == "TRUE" else False
 
 		if score != "-":
 			self.score = float(score)
