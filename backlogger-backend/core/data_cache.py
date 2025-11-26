@@ -5,7 +5,7 @@ from models.platform import Platform
 from utils.common_utils import add_game_to_dict
 
 class DataCache:
-    GAMES_MASTER_LIST = []
+    GAMES_MASTER_LIST: list[Game] = []
 
     GAMES_BY_STATUS = {}
     GAMES_BY_PLATFORM = {}
@@ -55,6 +55,12 @@ class DataCache:
         # Re-index all the remaining games to match the corresponding row numbers
         for index,game in enumerate(cls.GAMES_MASTER_LIST):
             game.assign_id(index + 1,is_reindexing=True)
+    
+    @classmethod
+    def search_master_list(cls,query: str):
+        search_results = [vars(game) for game in cls.GAMES_MASTER_LIST if query in game.name.lower()]
+
+        return search_results
     
     @classmethod
     def differentiate_games_by_status(cls,games_info: Game):

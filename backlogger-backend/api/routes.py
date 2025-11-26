@@ -6,6 +6,7 @@ from core.logger import logger
 from models.game import Game
 from services.recommend import recommend
 from services.sheet_parser import insert_game_to_sheet,edit_game_info,delete_game_info
+from services.game_search import fetch_search_matches
 from utils.constants import Constants
 from utils.common_utils import check_key_in_dict
 from utils.enrichers.append_request_enricher import enrich_append_request
@@ -215,3 +216,9 @@ def delete_game(id):
 	delete_game_info(id)
 
 	return jsonify({"message": "Successfully deleted the game information"}),200
+
+@api_blueprint.route("/search/<string:query>",methods=["GET"])
+def search_game(query):
+	matched_objects = fetch_search_matches(query)
+
+	return jsonify({"matches": matched_objects}),200
