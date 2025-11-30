@@ -32,3 +32,7 @@ class InvalidRowError(CustomError):
 class GameDeleteError(CustomError):
     def __init__(self, message,status_code=407):
         super().__init__(message,status_code)
+
+class GameSearchError(CustomError):
+    def __init__(self,message,status_code=408):
+        super().__init__(message,status_code)

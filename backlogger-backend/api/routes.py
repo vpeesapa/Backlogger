@@ -1,6 +1,6 @@
 from flask import Blueprint,jsonify,request
 
-from core.exceptions import NotFoundError,ValidationError,RequestParamError
+from core.exceptions import NotFoundError,ValidationError,RequestParamError,GameSearchError
 from core.data_cache import DataCache
 from core.logger import logger
 from models.game import Game
@@ -219,6 +219,11 @@ def delete_game(id):
 
 @api_blueprint.route("/search/<string:query>",methods=["GET"])
 def search_game(query):
+	if not query.strip():
+		error_message = "The search query cannot be empty."
+		logger.error(error_message)
+		raise GameSearchError(error_message)
+
 	matched_objects = fetch_search_matches(query)
 
 	return jsonify({"matches": matched_objects}),200

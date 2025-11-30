@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from core.exceptions import CustomError,NotFoundError,ValidationError,GameInsertionError,GameEditError,InvalidRowError,GameDeleteError
+from core.exceptions import CustomError,NotFoundError,ValidationError,GameInsertionError,GameEditError,InvalidRowError,GameDeleteError,GameSearchError
 
 def register_error_handlers(app):
     @app.errorhandler(CustomError)
@@ -47,6 +47,12 @@ def register_error_handlers(app):
     
     @app.errorhandler(GameDeleteError)
     def handle_delete_error(error):
+        response = jsonify({
+            "error": error.message
+        })
+    
+    @app.errorhandler(GameSearchError)
+    def handle_search_error(error):
         response = jsonify({
             "error": error.message
         })
