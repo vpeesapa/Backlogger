@@ -12,6 +12,7 @@ import AddGameContent from './AddGameContent';
 import { tabStyles } from '../styles';
 import { platformFilters, platformMapper, statsFilters, statusFilters, statusMapper } from '../Commons';
 import { fetchDataByPlatformService, fetchDataByStatusService, fetchPlatformDistributionDataService, fetchStatusDistributionDataService } from '../services/ApiService';
+import SearchContent from './SearchContent';
 
 function Content(props) {
     const [statsData,setStatsData] = React.useState({
@@ -26,6 +27,7 @@ function Content(props) {
 
     const [displayGames,setDisplayGames] = React.useState(true);
     const [displayStats,setDisplayStats] = React.useState(false);
+    const [displayRecommendations,setDisplayRecommendations] = React.useState(false);
     const [displayFilters,setDisplayFilters] = React.useState(true);
 
     React.useEffect(() => {
@@ -89,18 +91,21 @@ function Content(props) {
         if(newValue === "Platform") {
             setDisplayGames(true);
             setDisplayStats(false);
+            setDisplayRecommendations(false);
             setDisplayFilters(true);
             setCurrentFilters(platformFilters);
             fetchCurrentPageData("Platform",platformFilters[0]);
         } else if(newValue === "Status") {
             setDisplayGames(true);
             setDisplayStats(false);
+            setDisplayRecommendations(false);
             setDisplayFilters(true);
             setCurrentFilters(statusFilters);
             fetchCurrentPageData("Status",statusFilters[0]);
         } else if(newValue === "Stats") {
             setDisplayGames(false);
             setDisplayStats(true);
+            setDisplayRecommendations(false);
             setDisplayFilters(true);
             setSelectedType("Stats");
             setCurrentFilters(statsFilters);
@@ -109,8 +114,18 @@ function Content(props) {
         } else if(newValue === "Recommend") {
             setDisplayGames(false);
             setDisplayStats(false);
+            setDisplayRecommendations(true);
             setDisplayFilters(false);
             setSelectedType("Recommend");
+            setCurrentFilters([]);
+            setSelectedOption("");
+            setDisplayData([]);
+        } else if(newValue === "Search") {
+            setDisplayGames(false);
+            setDisplayStats(false);
+            setDisplayRecommendations(false);
+            setDisplayFilters(false);
+            setSelectedType("Search");
             setCurrentFilters([]);
             setSelectedOption("");
             setDisplayData([]);
@@ -158,6 +173,11 @@ function Content(props) {
                         value={"Recommend"}
                         sx={tabStyles}
                     />
+                    <Tab
+                        label={"Search"}
+                        value={"Search"}
+                        sx={tabStyles}
+                    />
                 </Tabs>
                 {
                     displayFilters ? (
@@ -188,7 +208,9 @@ function Content(props) {
                             displayStats ? (
                                 <StatsContent displayData={displayData} />
                             ) : (
-                                <RecommendationContent />
+                                displayRecommendations ? (
+                                    <RecommendationContent />
+                                ) : <SearchContent handleCurrentPageData={fetchCurrentPageData} />
                             )
                         )
                     }

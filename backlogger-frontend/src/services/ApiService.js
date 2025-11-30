@@ -45,4 +45,8 @@ export const fetchEditGameService = async (gameId,gameEditPayload) => {
 
 export const fetchDeleteGameService = async (gameId) => {
     return api.delete(`/delete_game/${gameId}`).then(response => response.data);
-}
+};
+
+export const fetchSearchGameService = async (query) => {
+    return api.get(`/search/${query}`).then(response => response.data);
+};
