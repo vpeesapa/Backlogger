@@ -30,6 +30,10 @@ function Content(props) {
     const [displayRecommendations,setDisplayRecommendations] = React.useState(false);
     const [displayFilters,setDisplayFilters] = React.useState(true);
 
+    const [currentQuery,setCurrentQuery] = React.useState("");
+
+    const searchRef = React.useRef(null);
+
     React.useEffect(() => {
         fetchCurrentPageData();
         fetchPlatformDistributionData();
@@ -54,6 +58,8 @@ function Content(props) {
                 }).catch(e => {
                     console.error(e);
                 });
+        } else if(type === "Search") {
+            searchRef.current?.searchGame(currentQuery);
         }
     };
 
@@ -210,7 +216,7 @@ function Content(props) {
                             ) : (
                                 displayRecommendations ? (
                                     <RecommendationContent />
-                                ) : <SearchContent handleCurrentPageData={fetchCurrentPageData} />
+                                ) : <SearchContent handleCurrentPageData={fetchCurrentPageData} handleSearchQuery={setCurrentQuery} ref={searchRef} />
                             )
                         )
                     }

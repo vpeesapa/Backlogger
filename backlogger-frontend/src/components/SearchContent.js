@@ -5,12 +5,20 @@ import { fetchSearchGameService } from '../services/ApiService';
 
 function SearchContent(props) {
     const {
-        handleCurrentPageData
+        handleCurrentPageData,
+        handleSearchQuery,
+        ref
     } = props;
 
     const [query,setQuery] = React.useState("");
     const [searchResults,setSearchResults] = React.useState([]);
     const [displayResults,setDisplayResults] = React.useState(false);
+
+    React.useEffect(() => {
+        ref.current = {
+            searchGame
+        };
+    },[ref]);
 
     const handleQueryChange = (event) => {
         setQuery(event.target.value);
@@ -19,7 +27,13 @@ function SearchContent(props) {
             return;
         }
 
-        fetchSearchGameService(event.target.value)
+        handleSearchQuery(event.target.value);
+
+        searchGame(event.target.value);
+    };
+
+    const searchGame = (query) => {
+        fetchSearchGameService(query)
             .then(responseData => {
                 setSearchResults(responseData.matches);
                 setDisplayResults(true);
