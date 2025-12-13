@@ -1,3 +1,5 @@
+from fuzzywuzzy import fuzz,process
+
 from core.logger import logger
 from models.game import Game
 from models.status import Status
@@ -57,8 +59,22 @@ class DataCache:
             game.assign_id(index + 1,is_reindexing=True)
     
     @classmethod
-    def search_master_list(cls,query: str):
-        search_results = [vars(game) for game in cls.GAMES_MASTER_LIST if query in game.name.lower()]
+    def search_master_list(cls,query: str,threshold = 90):
+        search_results = []
+
+        game_names = [game.name.lower() for game in cls.GAMES_MASTER_LIST]
+
+        # Performs a fuzzy search to find best matches to the query
+        best_matches = process.extract(query,game_names,scorer=fuzz.partial_ratio,limit=10)
+
+        for match in best_matches:
+            # Ignore matches that do not meet the threshold
+            if match[1] < threshold:
+                continue
+
+            match_name = match[0]
+            matched_game = next(vars(game) for game in cls.GAMES_MASTER_LIST if game.name.lower() == match_name)
+            search_results.append(matched_game)
 
         return search_results
     
