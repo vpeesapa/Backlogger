@@ -19,6 +19,7 @@
   - [POST /add_game](#post-add_game)
   - [POST /edit_game/\<id\>](#post-edit_gameid)
   - [DELETE /delete_game/\<id\>](#delete-delete_gameid)
+  - [GET /search/\<query\>](#get-searchquery)
 - [Future Improvements](#future-improvements)
 - [Credits](#credits)
 
@@ -338,6 +339,21 @@ curl --location --request DELETE 'localhost:8090/delete_game/202'
 - **406 ERROR**: Attempted to delete an out-of-range row.
 - **407 ERROR**: Failed to delete the game from the spreadsheet.
 
+### GET /search/\<query\>
+**Description**: Searches for a game in the spreadsheet.
+
+**Query Parameters**:
+- `query`: The search query matching the name of a game.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/search/ghost of'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: The game was successfully found in the spreadsheet.
+- **408 ERROR**: Search query was an empty string.
+
 ## Future Improvements
 - Improve frontend styling to be more responsive on different displays.
 - ~~Frontend should only fetch games from the selected category instead of all of them when the application loads for the first time.~~
@@ -350,6 +366,8 @@ curl --location --request DELETE 'localhost:8090/delete_game/202'
   - ~~Allow users to add new entries that will also be saved in the spreadsheet~~.
   - ~~Allow users to update existing entries and save those changes in the spreadsheet~~.
   - ~~Allow users to delete existing entries from the spreadsheet~~
+- ~~Implement a search functionality to find games in the spreadsheet.~~
+  - ~~Enable searched games to be edited or deleted.~~
 - ~~Centralize error handling in the backend.~~
 - Add a proxy server to handle frontend requests without dealing with CORS middleware issues.
 
