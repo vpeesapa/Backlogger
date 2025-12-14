@@ -10,3 +10,6 @@ class Config:
     CREDENTIALS_FILE = os.getenv("CREDENTIALS_FILE")
 
     LOGGING_FILE_NAME = os.getenv("LOGGING_FILE_NAME")
+
+    SEARCH_THRESHOLD_SCORE = int(os.getenv("SEARCH_THRESHOLD_SCORE"))
+    SEARCH_LIMIT = int(os.getenv("SEARCH_LIMIT"))
