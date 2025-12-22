@@ -61,6 +61,10 @@ function Content(props) {
         } else if(type === "Search") {
             searchRef.current?.searchGame(currentQuery);
         }
+
+        // Fetch the stats accordingly
+        fetchPlatformDistributionData();
+        fetchStatusDistributionData();
     };
 
     const fetchPlatformDistributionData = () => {
