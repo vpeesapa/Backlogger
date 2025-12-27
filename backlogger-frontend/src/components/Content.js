@@ -11,13 +11,14 @@ import RecommendationContent from './RecommendationContent';
 import AddGameContent from './AddGameContent';
 import { tabStyles } from '../styles';
 import { platformFilters, platformMapper, statsFilters, statusFilters, statusMapper } from '../Commons';
-import { fetchDataByPlatformService, fetchDataByStatusService, fetchPlatformDistributionDataService, fetchStatusDistributionDataService } from '../services/ApiService';
+import { fetchDataByPlatformService, fetchDataByStatusService, fetchPlatformDistributionDataService, fetchScoreDistributionDataService, fetchStatusDistributionDataService } from '../services/ApiService';
 import SearchContent from './SearchContent';
 
 function Content(props) {
     const [statsData,setStatsData] = React.useState({
         "Platform": {},
-        "Status": {}
+        "Status": {},
+        "Scores": {}
     });
     const [displayData,setDisplayData] = React.useState([]);
 
@@ -38,6 +39,7 @@ function Content(props) {
         fetchCurrentPageData();
         fetchPlatformDistributionData();
         fetchStatusDistributionData();
+        fetchScoreDistributionData();
     },[]);
 
     const fetchCurrentPageData = (type=selectedType,option=selectedOption) => {
@@ -65,6 +67,7 @@ function Content(props) {
         // Fetch the stats accordingly
         fetchPlatformDistributionData();
         fetchStatusDistributionData();
+        fetchScoreDistributionData();
     };
 
     const fetchPlatformDistributionData = () => {
@@ -88,6 +91,20 @@ function Content(props) {
                     return {
                         ...prevData,
                         "Status": responseData
+                    };
+                });
+            }).catch(e => {
+                console.error(e);
+            });
+    };
+
+    const fetchScoreDistributionData = () => {
+        fetchScoreDistributionDataService()
+            .then(responseData => {
+                setStatsData((prevData) => {
+                    return {
+                        ...prevData,
+                        "Scores": responseData
                     };
                 });
             }).catch(e => {
@@ -216,7 +233,7 @@ function Content(props) {
                             <GamesContent displayData={displayData} handleCurrentPageData={fetchCurrentPageData} />
                         ) : (
                             displayStats ? (
-                                <StatsContent displayData={displayData} />
+                                <StatsContent displayData={displayData} currentOption={selectedOption} />
                             ) : (
                                 displayRecommendations ? (
                                     <RecommendationContent />

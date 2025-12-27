@@ -20,7 +20,8 @@ export const statusFilters = [
 
 export const statsFilters = [
     "Platform",
-    "Status"
+    "Status",
+    "Scores"
 ];
 
 export const platformMapper = {

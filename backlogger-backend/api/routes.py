@@ -161,6 +161,22 @@ def fetch_games_distribution_per_platform():
 
 	return jsonify(games_per_platform),200
 
+@api_blueprint.route("/games_distribution_per_score",methods=["GET"])
+def fetch_games_distribution_per_score():
+	games_per_score = {}
+
+	for game in DataCache.GAMES_MASTER_LIST:
+		if game.score == "-":
+			continue
+
+		game_score = str(game.score)
+		if game_score not in games_per_score:
+			games_per_score[game_score] = 0
+		
+		games_per_score[game_score] += 1
+	
+	return jsonify(games_per_score),200
+
 @api_blueprint.route("/add_game",methods=["POST"])
 def insert_new_game():
 	data = request.get_json()
