@@ -75,6 +75,12 @@ def fetch_games_by_status(status):
 
 	return jsonify(games_by_status),200
 
+@api_blueprint.route("/platinums",methods=["GET"])
+def fetch_platinum_games():
+	platinum_games = [vars(game) for game in DataCache.GAMES_MASTER_LIST if game.all_achievements]
+
+	return jsonify(platinum_games),200
+
 @api_blueprint.route("/recommend",methods=["POST"])
 def recommend_games():
 	data = request.get_json()
