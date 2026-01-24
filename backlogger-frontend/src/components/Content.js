@@ -7,12 +7,19 @@ import {
 } from '@mui/material';
 import GamesContent from './GamesContent';
 import StatsContent from './StatsContent';
+import SearchContent from './SearchContent';
 import RecommendationContent from './RecommendationContent';
 import AddGameContent from './AddGameContent';
 import { tabStyles } from '../styles';
 import { platformFilters, platformMapper, statsFilters, statusFilters, statusMapper } from '../Commons';
-import { fetchDataByPlatformService, fetchDataByStatusService, fetchPlatformDistributionDataService, fetchScoreDistributionDataService, fetchStatusDistributionDataService } from '../services/ApiService';
-import SearchContent from './SearchContent';
+import {
+    fetchDataByPlatformService,
+    fetchDataByStatusService,
+    fetchPlatformDistributionDataService,
+    fetchPlatinumsService,
+    fetchScoreDistributionDataService,
+    fetchStatusDistributionDataService
+} from '../services/ApiService';
 
 function Content(props) {
     const [statsData,setStatsData] = React.useState({
@@ -55,6 +62,13 @@ function Content(props) {
                 });
         } else if(type === "Status") {
             fetchDataByStatusService(statusMapper[option])
+                .then(responseData => {
+                    setDisplayData(responseData);
+                }).catch(e => {
+                    console.error(e);
+                });
+        } else if(type === "Platinums") {
+            fetchPlatinumsService()
                 .then(responseData => {
                     setDisplayData(responseData);
                 }).catch(e => {
@@ -138,6 +152,13 @@ function Content(props) {
             setCurrentFilters(statsFilters);
             setSelectedOption(statsFilters[0]);
             setDisplayData(statsData["Platform"]);
+        } else if(newValue === "Platinums") {
+            setDisplayGames(true);
+            setDisplayStats(false);
+            setDisplayRecommendations(false);
+            setDisplayFilters(false);
+            setCurrentFilters([]);
+            fetchCurrentPageData("Platinums","");
         } else if(newValue === "Recommend") {
             setDisplayGames(false);
             setDisplayStats(false);
@@ -188,6 +209,11 @@ function Content(props) {
                     <Tab
                         label={"Status"}
                         value={"Status"}
+                        sx={tabStyles}
+                    />
+                    <Tab
+                        label={"Platinums"}
+                        value={"Platinums"}
                         sx={tabStyles}
                     />
                     <Tab

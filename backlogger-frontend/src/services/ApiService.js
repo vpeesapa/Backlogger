@@ -35,6 +35,10 @@ export const fetchDataByStatusService = async (status) => {
     return api.get(`/games_by_status/${status}`).then(response => response.data);
 };
 
+export const fetchPlatinumsService = async (status) => {
+    return api.get("/platinums").then(response => response.data);
+};
+
 export const fetchRecommendationDataService = async (recommendationPayload) => {
     return api.post("/recommend",recommendationPayload).then(response => response.data);
 };
