@@ -172,10 +172,7 @@ def fetch_games_distribution_per_platform():
 def fetch_games_distribution_per_score():
 	games_per_score = {}
 
-	for game in DataCache.GAMES_MASTER_LIST:
-		if game.score == "-":
-			continue
-
+	for game in DataCache.GAMES_BY_STATUS[Status.COMPLETE.value]:
 		game_score = str(game.score)
 		if game_score not in games_per_score:
 			games_per_score[game_score] = 0
