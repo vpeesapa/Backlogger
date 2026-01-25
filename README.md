@@ -15,9 +15,11 @@
   - [GET /games_on_platform/\<platform\>](#get-games_on_platformplatform)
   - [GET /all_games_by_status](#get-all_games_by_status)
   - [GET /games_by_status/\<status\>](#get-games_by_statusstatus)
+  - [GET /platinums](#get-platinums)
   - [POST /recommend](#post-recommend)
   - [GET /games_distribution_per_status](#get-games_distribution_per_status)
-  - [GET /games-distribution_per_platform](#get-games-distribution_per_platform)
+  - [GET /games_distribution_per_platform](#get-games_distribution_per_platform)
+  - [GET /games_distribution_per_score](#get-games_distribution_per_score)
   - [POST /add_game](#post-add_game)
   - [POST /edit_game/\<id\>](#post-edit_gameid)
   - [DELETE /delete_game/\<id\>](#delete-delete_gameid)
@@ -289,6 +291,17 @@ curl --location 'localhost:8090/games_by_status/wishlist'
 - **200 OK**": Successfully fetched the list of games with the specified completion status.
 - **400 ERROR**: Invalid value for `status` was passed.
 
+### GET /platinums
+**Description**: Returns the list of games with completed achievements.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/platinums'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched the list of games with completed achievements.
+
 ### POST /recommend
 **Description**: Recommends a certain number of games based on the platform and completion status.
 
@@ -325,7 +338,7 @@ curl --location 'localhost:8090/games_distribution_per_status'
 **HTTP Response Codes**:
 - **200 OK**: Successfully fetched the distribution of games based on their completion status.
 
-### GET /games-distribution_per_platform
+### GET /games_distribution_per_platform
 **Description**: Returns the distribution of games based on their platform.
 
 **cURL**:
@@ -335,6 +348,17 @@ curl --location 'localhost:8090/games_distribution_per_platform'
 
 **HTTP Response Codes**:
 - **200 OK**: Successfully fetched the distribution of games based on their platform.
+
+### GET /games_distribution_per_score
+**Description**: Returns the distribution of completed games based on their scores.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/games_distribution_per_score'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched the distribution of completed games based on their scores.
 
 ### POST /add_game
 **Description**: Adds a new game to the spreadsheet
