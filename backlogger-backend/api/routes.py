@@ -4,6 +4,7 @@ from core.exceptions import NotFoundError,ValidationError,RequestParamError,Game
 from core.data_cache import DataCache
 from core.logger import logger
 from models.game import Game
+from models.status import Status
 from services.recommend import recommend
 from services.sheet_parser import insert_game_to_sheet,edit_game_info,delete_game_info
 from services.game_search import fetch_search_matches
@@ -77,7 +78,7 @@ def fetch_games_by_status(status):
 
 @api_blueprint.route("/platinums",methods=["GET"])
 def fetch_platinum_games():
-	platinum_games = [vars(game) for game in DataCache.GAMES_MASTER_LIST if game.all_achievements]
+	platinum_games = [vars(game) for game in DataCache.GAMES_BY_STATUS[Status.COMPLETE.value] if game.all_achievements]
 
 	return jsonify(platinum_games),200
 
