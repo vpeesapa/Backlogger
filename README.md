@@ -8,6 +8,7 @@
   - [Backend Installation and Setup](#backend-installation-and-setup)
     - [Optional: Setup the Virtual Environment](#optional-setup-the-virtual-environment)
   - [Frontend Installation and Setup](#frontend-setup-and-installation)
+- [Data Models](#data-models)
 - [API Endpoints](#api-endpoints)
   - [GET /games_by_platform](#get-games_by_platform)
   - [GET /games_on_platform/\<platform\>](#get-games_on_platformplatform)
@@ -132,6 +133,31 @@ Similarly, to stop the application, run:
 ___
 
 Regardless of the method used, the frontend application will start on **port 3000** and can be verified with any web browser.
+
+## Data Models
+The primary data model used in Backlogger is the `Game` class (found in `backlogger-backend/models/game.py`).
+### Member Variables:
+- `id`: The unique ID of the game that typically corresponds to the game's row number in the Google Sheets spreadsheet.
+- `name`: The name of the game.
+- `cover_image_link`: The link to the cover image to be used by the frontend. Mostly taken from Backloggd entries.
+- `platform`: The platform of the game. For example, PS5, Steam, Switch, etc.
+- `developer`: The list of developers who worked on the game.
+- `year`: The year of release of the game. In the case of remasters, this is the release year of the original.
+- `completion_time`: The time taken to beat the main story of the game. Taken from [howlongtobeat.com](https://howlongtobeat.com/).
+- `status`: The completion status of the game. Can be either Complete, In Progress, Wishlist, Backlog, or Dropped.
+- `genres`: The list of the game's genres.
+- `all_achievements`: Indicates whether all the achievements have been obtained in the game or not. Only valid for completed games.
+- `score`: Score given to the game upon completion.
+- `backloggd_score`: Score calculated based on `score` (only if the game is completed) to save in Backloggd.
+
+### Member Functions:
+- `__init__`: The parameterized constructor used to assign values to the member variables upon creation of a new entry.
+- `assign_id`: Assigns an ID corresponding to the game's row number in the Google Sheets spreadsheet. This function is also called when reindexing takes place, particularly when entries are deleted.
+- `convert_to_row`: Converts the game's information into a list that is compatible with the Google Sheets API.
+- `print_game_info`: A debug function used to print the game's information in a formatted fashion in the output console.
+- `to_dict`: A debug function to convert the game's information into a dictionary. _No longer used due to Python's in-built **vars()** function._
+
+**Note**: In addition to the `Game` class, Backlogger also uses two `Enums` called `Platform` and `Status` to ensure that the `platform` and `status` member variables are assigned proper values. Both `Enums` are found in the `platform.py` and `status.py` scripts respectively (These scripts are present in the `backlogger-backend/models` directory).
 
 ## API Endpoints
 ### GET /games_by_platform
