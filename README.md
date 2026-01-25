@@ -4,6 +4,7 @@
 - [Author](#author)
 - [About Backlogger](#about-backlogger)
 - [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
 - [Installation and Setup](#installation-and-setup)
   - [Backend Installation and Setup](#backend-installation-and-setup)
     - [Optional: Setup the Virtual Environment](#optional-setup-the-virtual-environment)
@@ -34,6 +35,82 @@ Backlogger is a game tracking application that allows gamers to keep track of th
 
 ## Technologies Used
 Backlogger is built on Python and Reactjs. Flask was used to create the backend application and necessary API routes. The frontend was built with components from Material UI. The data is saved inside a Google Sheets spreadsheet and is accessed by the backend application during the initial setup.
+
+## Project Structure
+```bash
+.
+|-- README.md
+|-- backlogger-backend
+|   |-- api
+|   |   |-- __init__.py
+|   |   |-- error_handlers.py
+|   |   `-- routes.py
+|   |-- backlogger.py
+|   |-- core
+|   |   |-- __init__.py
+|   |   |-- config.py
+|   |   |-- data_cache.py
+|   |   |-- exceptions.py
+|   |   `-- logger.py
+|   |-- models
+|   |   |-- __init__.py
+|   |   |-- game.py
+|   |   |-- platform.py
+|   |   `-- status.py
+|   |-- requirements.txt
+|   |-- services
+|   |   |-- __init__.py
+|   |   |-- game_search.py
+|   |   |-- recommend.py
+|   |   `-- sheet_parser.py
+|   `-- utils
+|       |-- __init__.py
+|       |-- common_utils.py
+|       |-- constants.py
+|       |-- enrichers
+|       |   |-- __init__.py
+|       |   `-- append_request_enricher.py
+|       `-- sheet_utils.py
+|-- backlogger-frontend
+|   |-- package-lock.json
+|   |-- package.json
+|   |-- public
+|   |   |-- favicon.ico
+|   |   |-- index.html
+|   |   |-- logo192.png
+|   |   |-- logo512.png
+|   |   |-- manifest.json
+|   |   `-- robots.txt
+|   `-- src
+|       |-- App.css
+|       |-- App.js
+|       |-- App.test.js
+|       |-- Commons.js
+|       |-- components
+|       |   |-- AddGameContent.js
+|       |   |-- AddGameDialog.js
+|       |   |-- AddGameForm.js
+|       |   |-- Content.js
+|       |   |-- DeleteGameDialog.js
+|       |   |-- GamesContent.js
+|       |   |-- GamesContentDialog.js
+|       |   |-- NavBar.js
+|       |   |-- RecommendationContent.js
+|       |   |-- SearchContent.js
+|       |   `-- StatsContent.js
+|       |-- index.css
+|       |-- index.js
+|       |-- logo.svg
+|       |-- reportWebVitals.js
+|       |-- services
+|       |   `-- ApiService.js
+|       |-- setupTests.js
+|       `-- styles.js
+|-- start-backend-server.sh
+|-- start-frontend-server.sh
+|-- stop-backend-server.sh
+`-- stop-frontend-server.sh
+```
 
 ## Installation and Setup
 Backlogger's code is divided into two main components: the backend (found in `backlogger-backend`) and the frontend (found in `backlogger-frontend`).
