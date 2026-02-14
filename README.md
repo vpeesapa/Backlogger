@@ -302,6 +302,17 @@ curl --location 'localhost:8090/platinums'
 **HTTP Response Codes**:
 - **200 OK**: Successfully fetched the list of games with completed achievements.
 
+### GET /hall_of_famers
+**Description**: Returns the list of games with a perfect score.
+
+**cURL**:
+```cURL
+curl --location 'localhost:8090/hall_of_famers'
+```
+
+**HTTP Response Codes**:
+- **200 OK**: Successfully fetched the list of games with a perfect score.
+
 ### POST /recommend
 **Description**: Recommends a certain number of games based on the platform and completion status.
 
