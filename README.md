@@ -16,6 +16,7 @@
   - [GET /all_games_by_status](#get-all_games_by_status)
   - [GET /games_by_status/\<status\>](#get-games_by_statusstatus)
   - [GET /platinums](#get-platinums)
+  - [GET /hall_of_famers](#get-hall_of_famers)
   - [POST /recommend](#post-recommend)
   - [GET /games_distribution_per_status](#get-games_distribution_per_status)
   - [GET /games_distribution_per_platform](#get-games_distribution_per_platform)
