@@ -15,6 +15,7 @@ import { platformFilters, platformMapper, statsFilters, statusFilters, statusMap
 import {
     fetchDataByPlatformService,
     fetchDataByStatusService,
+    fetchHallOfFamersService,
     fetchPlatformDistributionDataService,
     fetchPlatinumsService,
     fetchScoreDistributionDataService,
@@ -69,6 +70,13 @@ function Content(props) {
                 });
         } else if(type === "Platinums") {
             fetchPlatinumsService()
+                .then(responseData => {
+                    setDisplayData(responseData);
+                }).catch(e => {
+                    console.error(e);
+                });
+        } else if (type == "Hall of Fame") {
+            fetchHallOfFamersService()
                 .then(responseData => {
                     setDisplayData(responseData);
                 }).catch(e => {
@@ -159,6 +167,13 @@ function Content(props) {
             setDisplayFilters(false);
             setCurrentFilters([]);
             fetchCurrentPageData("Platinums","");
+        } else if (newValue == "Hall of Fame") {
+            setDisplayGames(true);
+            setDisplayStats(false);
+            setDisplayRecommendations(false);
+            setDisplayFilters(false);
+            setCurrentFilters([]);
+            fetchCurrentPageData("Hall of Fame","")
         } else if(newValue === "Recommend") {
             setDisplayGames(false);
             setDisplayStats(false);
@@ -214,6 +229,11 @@ function Content(props) {
                     <Tab
                         label={"Platinums"}
                         value={"Platinums"}
+                        sx={tabStyles}
+                    />
+                    <Tab
+                        label={"Hall of Fame"}
+                        value={"Hall of Fame"}
                         sx={tabStyles}
                     />
                     <Tab
