@@ -82,6 +82,12 @@ def fetch_platinum_games():
 
 	return jsonify(platinum_games),200
 
+@api_blueprint.route("/hall_of_famers",methods=["GET"])
+def fetch_hall_of_famers():
+	hall_off_famers = [vars(game) for game in DataCache.GAMES_BY_STATUS[Status.COMPLETE.value] if game.score == 10]
+
+	return jsonify(hall_off_famers),200
+
 @api_blueprint.route("/recommend",methods=["POST"])
 def recommend_games():
 	data = request.get_json()
