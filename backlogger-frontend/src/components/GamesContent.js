@@ -108,7 +108,8 @@ function GamesContent(props) {
                                             key={item["name"]}
                                             sx={{
                                                 width: 225,
-                                                height: 285 
+                                                height: 285,
+                                                border: !isRecommending && hoverRowIndex !== -1 && hoverColIndex !== -1 && hoverRowIndex === rowIndex && hoverColIndex === colIndex ? "solid #00802b" : "none"
                                             }}
                                             onMouseEnter={(event) => handleMouseEnter(event,rowIndex,colIndex)}
                                             onMouseLeave={handleMouseExit}
