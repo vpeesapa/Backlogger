@@ -26,9 +26,9 @@ nohup bash -c "PORT=${FRONTEND_PORT} npm start" > "$LOG_FILE" 2>&1 &
 echo "Starting the frontend application..."
 sleep 10
 
-pid=$(netstat -ano | grep LISTENING | grep :3000 | awk '{print $5}')
+pid=$(netstat -ano | grep LISTENING | grep ':3000 ' | awk '{print $5}' | head -n 1)
 
-if tasklist //FI "PID eq $pid" > /dev/null; then
+if [ -n "$pid" ]; then
     echo "$pid" > "$FRONTEND_PID_FILE"
 
     echo "The frontend application is running with process ID: $pid"
